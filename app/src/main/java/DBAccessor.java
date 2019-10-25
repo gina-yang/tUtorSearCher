@@ -18,7 +18,7 @@ public class DBAccessor
     }
     public ResultSet executeQuery(String query)
     {
-
+        return null;
     }
 }
 
