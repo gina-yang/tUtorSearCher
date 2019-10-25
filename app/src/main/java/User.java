@@ -6,7 +6,7 @@ public abstract class User
     private String gender = "other";//male, female, other
     private String profilePic = "";//url to the profile pic
     private String email = "";//should be a usc email
-    private ArrayList<Request> requests = new ArrayList<Request>;
+    private ArrayList<Request> requests = new ArrayList<Request>();
 
     //getters
     public String getName()
