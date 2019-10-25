@@ -2,7 +2,7 @@ public class Tutor extends User
 {
     private double rating = 0;//holds 5 star rating of this tutor
     private int numRatings = 0;//number of ratings this tutor has received
-    private Availability availability = new Availability(null);
+    private Availability availability;
 
     //getters
     public Availability getAvailability()
