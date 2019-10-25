@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1026862940178",
+    "firebase_url": "https://tutorsearcher-310.firebaseio.com",
+    "project_id": "tutorsearcher-310",
+    "storage_bucket": "tutorsearcher-310.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1026862940178:android:0714fcc54be6e31e4618cb",
+        "android_client_info": {
+          "package_name": "com.example.tutorsearcher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1026862940178-tscimp0h1l3upjb6nap6kfsfblbkv098.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDA5O-XiVTrNiPef0dDhuMNhoLl2HPLc0M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1026862940178-tscimp0h1l3upjb6nap6kfsfblbkv098.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
