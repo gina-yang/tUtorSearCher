@@ -1,6 +1,8 @@
-package com.example.tutorsearcher;
+package com.example.tutorsearcher.activity;
 
 import android.os.Bundle;
+
+import com.example.tutorsearcher.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;

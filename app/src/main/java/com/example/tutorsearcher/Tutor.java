@@ -1,3 +1,7 @@
+package com.example.tutorsearcher;
+
+import com.example.tutorsearcher.Availability;
+
 public class Tutor extends User
 {
     private double rating = 0;//holds 5 star rating of this tutor

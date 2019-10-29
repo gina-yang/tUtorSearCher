@@ -1,5 +1,11 @@
+package com.example.tutorsearcher;
+
 import java.util.ArrayList;
-public abstract class User
+
+import com.example.tutorsearcher.Request;
+import com.example.tutorsearcher.db.DBAccessor;
+
+public abstract class User extends DBAccessor
 {
     private String name = "";
     private int age = 1;
@@ -35,9 +41,8 @@ public abstract class User
     }
 
     //setters
-    public void setProfilePic(String newPic)
-    {
+    public void setProfilePic(String newPic) {
         profilePic = newPic;
-    }
 
+    }
 }

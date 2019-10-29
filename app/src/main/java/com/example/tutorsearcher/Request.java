@@ -1,3 +1,5 @@
+package com.example.tutorsearcher;
+
 public class Request
 {
     private String status = "";//is either accepted, rejected. or pending

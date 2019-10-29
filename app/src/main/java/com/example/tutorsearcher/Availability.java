@@ -1,3 +1,5 @@
+package com.example.tutorsearcher;
+
 import java.util.ArrayList;
 public class Availability
 {
