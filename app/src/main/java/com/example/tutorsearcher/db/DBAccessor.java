@@ -3,12 +3,18 @@ package com.example.tutorsearcher.db;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class DBAccessor {
     public boolean loggedin;
@@ -65,7 +71,24 @@ public class DBAccessor {
      * @param role user role (tutee or tutor)
      */
     public void addNewUser(String email, String password, String role){
-        
+        Map<String, Object> newUser = new HashMap<>();
+        newUser.put("email", email);
+        newUser.put("password", password);
+
+        db.collection(role)
+                .add(newUser)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        System.out.println("DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Error adding document");
+                    }
+                });
     }
 
     // Add availability (tutor)
