@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DBAccessor {
-    public boolean loggedin;
+    private boolean loggedin;
 
     private FirebaseFirestore db;
 
@@ -97,13 +97,13 @@ public class DBAccessor {
     /**
      * Adds availability of tutor to database
      * @param email email of tutor
-     * @param a Availability object
+     * @param a String representing availability
      */
-    public void addAvailability(String email, Availability a){
+    public void addAvailability(String email, String a){
         Map<String, Object> availability = new HashMap<>();
-        availability.put("day", a.day);
-        availability.put("starttime", a.starttime);
-        availability.put("endtime", a.endtime);
+        String[] sp = a.split(" ", 2);
+        availability.put("day", sp[0]);
+        availability.put("starttime", sp[1]);
 
         db.collection("tutors").document(email)
                 .collection("availabilitylist")
@@ -126,21 +126,41 @@ public class DBAccessor {
      * TODO
      * Gets all of a tutor's availability
      * @param email tutor's email
-     * @return ArrayList of availability objects
+     * @return ArrayList of Strings representing availability
      */
-    public ArrayList<Availability> getAllAvailability(String email){
-        ArrayList<Availability> alist = new ArrayList<Availability>();
+    public ArrayList<String> getAllAvailability(String email){
+        ArrayList<String> alist = new ArrayList<String>();
 
         return alist;
     }
 
     /**
-     * TODO
      * Adds a tutee request to the database
      * @param email tutee's email
      */
     public void addRequest(String email, Request r){
         Map<String, Object> request = new HashMap<>();
+        request.put("course", r.course);
+        request.put("status", r.status);
+        request.put("starttime", r.starttime);
+        request.put("endtime", r.endtime);
+        request.put("tutor", r.tutorEmail);
+        request.put("tutee", r.tuteeEmail);
+
+        db.collection("requests")
+                .add(request)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        System.out.println("DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Error adding document");
+                    }
+                });
     }
 
     /**
@@ -148,12 +168,13 @@ public class DBAccessor {
      * Gets all requests associated with a user (either tutor or tutee)
      * @return ArrayList of Request objects
      */
-    public ArrayList<Request> getRequests(){
+    public ArrayList<Request> getAllRequests(){
         ArrayList<Request> r = new ArrayList<Request>();
+
         return r;
     }
 
-    // Get availability at certain time
+    // Get availability at certain time?
 
     // Update tutor profile (Ben)
 
