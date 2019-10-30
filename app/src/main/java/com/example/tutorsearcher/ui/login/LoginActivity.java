@@ -16,9 +16,11 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +43,12 @@ public class LoginActivity extends AppCompatActivity {
         final EditText passwordEditText = findViewById(R.id.password);
         final Button loginButton = findViewById(R.id.login);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
+        //spinner stuff below
+        Spinner loginSpinner = (Spinner)findViewById(R.id.spinner);
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(LoginActivity.this,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.LoginSpinnerOptions));
+        myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        loginSpinner.setAdapter(myAdapter);
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
