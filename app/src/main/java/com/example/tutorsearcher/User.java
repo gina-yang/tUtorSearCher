@@ -3,14 +3,26 @@ import java.util.ArrayList;
 
 public abstract class User
 {
-    private String name = "";
-    private int age = 1;
-    private String gender = "other";//male, female, other
-    private String profilePic = "";//url to the profile pic
-    private String email = "";//should be a usc email
-    private ArrayList<Request> requests = new ArrayList<Request>();
-    //private Availability availabilityList; // = new ArrayList<Availability>();// *** added availability
-    private ArrayList<String> courses = new ArrayList<String>();// *** adding courses
+    private String name;
+    private int age;
+    private String gender; //male, female, other
+    private String profilePic; //url to the profile pic
+    private String email; //should be a usc email
+    private String type; //"tutor" or "tutee"
+    private ArrayList<Request> requests;
+
+    // Constructor
+    public User(String email_, String type_)
+    {
+        email = email_;
+        type = type_;
+        // default values
+        name = "";
+        age = -1;
+        gender = "";
+        profilePic = "";
+        requests = new ArrayList<Request>();
+    }
 
     //getters
     public String getName()
@@ -25,7 +37,7 @@ public abstract class User
     {
         return gender;
     }
-    public String profilePic()
+    public String getProfilePic()
     {
         return profilePic;
     }
@@ -37,14 +49,19 @@ public abstract class User
     {
         return requests;
     }
-   /* public Availability getAvailability()
+    public String getType() {return type;}
+
+    // TUTOR ONLY BELOW... these will be overridden by polymorphism in Tutor class---
+    public ArrayList<Availability> getAvailability()
     {
-        return availabilityList;
-    }*/
+        return null;
+    }
     public ArrayList<String> getCourses()
     {
-        return courses;
+        return null;
     }
+    public int getNumRatings() {return -1;}
+    public double getRating() {return -1;}
 
     //setters
     public void setProfilePic(String newPic)
@@ -52,10 +69,27 @@ public abstract class User
         profilePic = newPic;
     }
     public void setName(String newName){ name = newName; } // *** added setter for name
-    //public void setAvailability(Availability newAvailabilityList){ availabilityList = newAvailabilityList; }
-    // *** added setter for avail
-    //public void addAvailabiltiy(String newAvailability){ availabilityList.add(newAvailability); }
-    public void setCourses(ArrayList<String> newCourses){ courses = newCourses; } // *** added setter for courses
-    public void addCourses(String addCourse){ courses.add(addCourse); }
+    public void setAge(int newAge){ age = newAge; }
+    public void setGender(String newGender){ gender = newGender; }
 
+    // TUTOR ONLY BELOW... these will be overridden by polymorphism in Tutor class---
+    public void setAvailability(ArrayList<Availability> newAvailabilityList){
+        throw new RuntimeException("This method is not supported except by an instance of a Tutor class");
+    }
+    public void setCourses(ArrayList<String> newCourses){
+        throw new RuntimeException("This method is not supported except by an instance of a Tutor class");
+    }
+    public void addCourses(String addCourse){
+        throw new RuntimeException("This method is not supported except by an instance of a Tutor class");
+    }
+    public void setNumRatings(int newNumRatings) {
+        throw new RuntimeException("This method is not supported except by an instance of a Tutor class");
+    }
+    public void setRating(double newRating) {
+        throw new RuntimeException("This method is not supported except by an instance of a Tutor class");
+    }
+    public void addRating(double newRating)
+    {
+        throw new RuntimeException("This method is not supported except by an instance of a Tutor class");
+    }
 }

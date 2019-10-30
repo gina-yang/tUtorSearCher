@@ -1,5 +1,9 @@
 package com.example.tutorsearcher;
 
 public class Tutee extends User {
-    public String type = "tutee";
+    // Constructor
+    public Tutee(String email_)
+    {
+        super(email_, "tutee");
+    }
 }
