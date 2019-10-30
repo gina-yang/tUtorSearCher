@@ -1,5 +1,9 @@
 package com.example.tutorsearcher.db;
 
+import com.example.tutorsearcher.User;
+import com.example.tutorsearcher.Tutor;
+import com.example.tutorsearcher.Tutee;
+
 import androidx.annotation.NonNull;
 
 import com.example.tutorsearcher.Availability;
@@ -155,12 +159,70 @@ public class DBAccessor {
 
     // Get availability at certain time
 
-    // Update tutor profile (Ben)
+    // Update user profile [works for both tutor and tutee using polymorphism] (Ben)
+    // Takes in a User and updates all fields in Firebase
+    /**
+     * Update user profile [works for both tutor and tutee using polymorphism]
+     * @param u user to be updated
+     */
+    public void updateProfile(User u)
+    {
+        // create new map and courses and availabilities
+        Map<String, Object> profileMap = new HashMap<>();
 
-    // Update tutee profile (Ben)
+        profileMap.put("email", u.getEmail());
+        profileMap.put("age", u.getAge());
+        profileMap.put("gender", u.getGender());
+        profileMap.put("name", u.getName());
+        profileMap.put("pic", u.getProfilePic());
+
+        // if it's a tutor, add tutor-specific fields to map and update courses and availabilities
+        if(u.getType()=="tutor")
+        {
+            profileMap.put("numratings", u.getNumRatings());
+            profileMap.put("rating", u.getRating());
+            profileMap.put("courses", u.getCourses());
+            profileMap.put("availability", u.getAvailability());
+        }
+
+        // connect to DB and overwrite this profile
+        db.collection(u.getType()+"s").document(u.getEmail())
+                .update(profileMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        System.out.println("Profile overwritten with user email");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Error adding document");
+                    }
+                });
+    }
 
     // Get profile (Ben)
-
+    // Automatically creates a Tutor or Tutee based on the role in the email
+    // Returns that object
+    /**
+     * Fetches the profile of a user
+     * @param email user email
+     * @param role user role (tutee or tutor)
+     * @return a User class instance (Tutor or Tutee) with info corresponding to profile
+     */
+    public User getProfile(String email, String role)
+    {
+        // Check DB for email
+        // If found...
+            // Determine type (tutor or tutee) of this account
+            // Appropriately create a Tutor or Tutee instance
+            // Add all the generic User info
+            // If it's a tutor, add all Tutor-specific info
+        // If not found...
+            // return null
+        return null;
+    }
 }
 
 
