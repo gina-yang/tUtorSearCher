@@ -52,7 +52,7 @@ public abstract class User
     public String getType() {return type;}
 
     // TUTOR ONLY BELOW... these will be overridden by polymorphism in Tutor class---
-    public ArrayList<Availability> getAvailability()
+    public ArrayList<String> getAvailability()
     {
         return null;
     }
@@ -73,7 +73,7 @@ public abstract class User
     public void setGender(String newGender){ gender = newGender; }
 
     // TUTOR ONLY BELOW... these will be overridden by polymorphism in Tutor class---
-    public void setAvailability(ArrayList<Availability> newAvailabilityList){
+    public void setAvailability(ArrayList<String> newAvailabilityList){
         throw new RuntimeException("This method is not supported except by an instance of a Tutor class");
     }
     public void setCourses(ArrayList<String> newCourses){
