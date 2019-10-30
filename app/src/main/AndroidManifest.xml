@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.TuteeMainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name">
 
         </activity>
