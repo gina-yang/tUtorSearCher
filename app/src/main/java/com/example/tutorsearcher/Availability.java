@@ -1,6 +1,5 @@
 package com.example.tutorsearcher;
 
-import java.util.ArrayList;
 public class Availability {
     // Change this to "Day" object later for calendar
     public String day;
@@ -19,4 +18,3 @@ public class Availability {
         this.endtime = endtime;
     }
 }
-
