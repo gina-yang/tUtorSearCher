@@ -97,11 +97,11 @@ public class DBAccessor {
 
     // Get requests (both)
 
-    // Update tutor profile
+    // Update tutor profile (Ben)
 
-    // Update tutee profile
+    // Update tutee profile (Ben)
 
-    // Get profile
+    // Get profile (Ben)
 
 }
 
