@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tutorsearcher.R;
+import com.example.tutorsearcher.activity.MainActivity;
 import com.example.tutorsearcher.ui.login.LoginViewModel;
 import com.example.tutorsearcher.ui.login.LoginViewModelFactory;
 
@@ -121,11 +123,21 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
+               /* loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
+
+                */
+               //TODO: authenticate login
+               openMainActivity();//after logging in go to the main acitivity page
             }
         });
+    }
+
+    public void openMainActivity()
+    {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     private void updateUiWithUser(LoggedInUserView model) {

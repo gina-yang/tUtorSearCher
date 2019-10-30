@@ -9,7 +9,7 @@ public abstract class User
     private String profilePic = "";//url to the profile pic
     private String email = "";//should be a usc email
     private ArrayList<Request> requests = new ArrayList<Request>();
-    private Availability availabilityList; // = new ArrayList<Availability>();// *** added availability
+    //private Availability availabilityList; // = new ArrayList<Availability>();// *** added availability
     private ArrayList<String> courses = new ArrayList<String>();// *** adding courses
 
     //getters
@@ -37,10 +37,10 @@ public abstract class User
     {
         return requests;
     }
-    public Availability getAvailability()
+   /* public Availability getAvailability()
     {
         return availabilityList;
-    }
+    }*/
     public ArrayList<String> getCourses()
     {
         return courses;
@@ -52,9 +52,9 @@ public abstract class User
         profilePic = newPic;
     }
     public void setName(String newName){ name = newName; } // *** added setter for name
-    public void setAvailability(Availability newAvailabilityList){ availabilityList = newAvailabilityList; }
+    //public void setAvailability(Availability newAvailabilityList){ availabilityList = newAvailabilityList; }
     // *** added setter for avail
-    public void addAvailabiltiy(String newAvailability){ availabilityList.addTimeslot(newAvailability); }
+    //public void addAvailabiltiy(String newAvailability){ availabilityList.add(newAvailability); }
     public void setCourses(ArrayList<String> newCourses){ courses = newCourses; } // *** added setter for courses
     public void addCourses(String addCourse){ courses.add(addCourse); }
 
