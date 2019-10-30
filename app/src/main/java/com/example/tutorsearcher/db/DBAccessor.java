@@ -58,7 +58,15 @@ public class DBAccessor {
         return loggedin;
     }
 
-    // Add new user
+    /**
+     * Adds a new user to the database
+     * @param email user email
+     * @param password user password
+     * @param role user role (tutee or tutor)
+     */
+    public void addNewUser(String email, String password, String role){
+        
+    }
 
     // Add availability (tutor)
 
