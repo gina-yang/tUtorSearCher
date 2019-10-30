@@ -2,6 +2,8 @@ package com.example.tutorsearcher.db;
 
 import androidx.annotation.NonNull;
 
+import com.example.tutorsearcher.Availability;
+import com.example.tutorsearcher.Request;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -13,6 +15,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,12 +78,12 @@ public class DBAccessor {
         newUser.put("email", email);
         newUser.put("password", password);
 
-        db.collection(role)
-                .add(newUser)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        db.collection(role).document(email)
+                .set(newUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        System.out.println("DocumentSnapshot added with ID: " + documentReference.getId());
+                    public void onSuccess(Void aVoid) {
+                        System.out.println("DocumentSnapshot added with user email");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -91,11 +94,66 @@ public class DBAccessor {
                 });
     }
 
-    // Add availability (tutor)
+    /**
+     * Adds availability of tutor to database
+     * @param email email of tutor
+     * @param a Availability object
+     */
+    public void addAvailability(String email, Availability a){
+        Map<String, Object> availability = new HashMap<>();
+        availability.put("day", a.day);
+        availability.put("starttime", a.starttime);
+        availability.put("endtime", a.endtime);
 
-    // Add request (tutee)
+        db.collection("tutors").document(email)
+                .collection("availabilitylist")
+                .add(availability)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        System.out.println("DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Error adding document");
+                    }
+                });
+    }
 
-    // Get requests (both)
+    /**
+     * TODO
+     * Gets all of a tutor's availability
+     * @param email tutor's email
+     * @return ArrayList of availability objects
+     */
+    public ArrayList<Availability> getAllAvailability(String email){
+        ArrayList<Availability> alist = new ArrayList<Availability>();
+
+        return alist;
+    }
+
+    /**
+     * TODO
+     * Adds a tutee request to the database
+     * @param email tutee's email
+     */
+    public void addRequest(String email, Request r){
+        Map<String, Object> request = new HashMap<>();
+    }
+
+    /**
+     * TODO
+     * Gets all requests associated with a user (either tutor or tutee)
+     * @return ArrayList of Request objects
+     */
+    public ArrayList<Request> getRequests(){
+        ArrayList<Request> r = new ArrayList<Request>();
+        return r;
+    }
+
+    // Get availability at certain time
 
     // Update tutor profile (Ben)
 
