@@ -1,7 +1,5 @@
 package com.example.tutorsearcher;
 
-import com.example.tutorsearcher.Availability;
-
 import java.util.ArrayList;
 
 public class Tutor extends User {

@@ -1,52 +1,22 @@
 package com.example.tutorsearcher;
 
 import java.util.ArrayList;
-public class Availability
-{
-    /*The list stores the time slots the tutor is available in strings formatted with
-    day and then time (ex. “Sat 9 am - 10 am” or “Mon 11 am - 12 pm”)*/
-    ArrayList<String> availabilityList = new ArrayList<String>();
+public class Availability {
+    // Change this to "Day" object later for calendar
+    public String day;
 
-    //costructor
-    Availability(ArrayList<String> list)
-    {
-        availabilityList = list;
-    }
-
-    public void changeAvailability(ArrayList<String> list)
-    {
-        availabilityList = list;
-    }
+    // Change these to "Time" objects later for calendar
+    public String starttime;
+    public String endtime;
 
     /**
-     * The method accepts input as a string formatted with day and then time
-     * (ex. “Sat 9 am - 10 am” or “Mon 11 am - 12 pm”) and checks against the
-     * AvaliabilityList to see if the tutor is available for the given time slot
+     * Changes the timeslot for availability on a certain day
+     * @param starttime new start time
+     * @param endtime new end time
      */
-    public boolean isAvailable(String time)
-    {
-        //iterate through all the strings in the availability list
-        for(int i = 0; i < availabilityList.size(); i++)
-        {
-            //see if inputted time matches anything
-            if(availabilityList.get(i).equals(time))
-            {//found a time that is equal to input
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void removeTimeslot(String time)
-    {
-        //search for this timeslot in the list
-        for(int i = 0; i < availabilityList.size(); i++)
-        {
-            if(availabilityList.get(i).equals(time))
-            {//we found the time to be removed from the availability list
-                availabilityList.remove(i);//remove it
-            }
-        }
+    public void changeTimeslot(String starttime, String endtime){
+        this.starttime = starttime;
+        this.endtime = endtime;
     }
 }
 

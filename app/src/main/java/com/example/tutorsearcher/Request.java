@@ -1,14 +1,15 @@
 package com.example.tutorsearcher;
 
-public class Request
-{
-    private String status = "";//is either accepted, rejected. or pending
-    private String classCode = "";//holds the class ex: CSCI310
-    private String time = "";//holds the time
-    private Tutor tutor;//the tutor this request is being sent to
-    private Tutee tutee;//the tutee that made this request
+public class Request {
+    public String tuteeEmail;
+    public String tutorEmail;
+    public String status;//is either accepted, rejected. or pending
+    public String course;//holds the class ex: CSCI310
+    // Change these to "Time" objects later for calendar
+    public String starttime;
+    public String endtime;
 
-    Request(Tutee tutee, Tutor tutor, String classCode, String time) {
+    public Request(Tutee tutee, Tutor tutor, String classCode, String time) {
 
     }
 }

@@ -1,10 +1,5 @@
 package com.example.tutorsearcher;
 
-import java.util.ArrayList;
-
-import com.example.tutorsearcher.Request;
-import com.example.tutorsearcher.db.DBAccessor;
-
 public abstract class User {
     public String firstname;
     public String lastname;
