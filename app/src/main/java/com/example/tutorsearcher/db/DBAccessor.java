@@ -19,13 +19,22 @@ public class DBAccessor {
         db = FirebaseFirestore.getInstance();
     }
 
-    /**
-     * Returns the database in Firebase
-     * @return Firestore database instance
-     */
-    public FirebaseFirestore getDB(){
-        return this.db;
-    }
+    // Check if new user
+
+    // Add new user
+
+    // Add availability (tutor)
+
+    // Add request (tutee)
+
+    // Get requests (both)
+
+    // Update tutor profile
+
+    // Update tutee profile
+
+    // Get profile
+
 }
 
 
