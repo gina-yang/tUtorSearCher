@@ -1,5 +1,7 @@
 package com.example.tutorsearcher.db;
 
+import android.util.Log;
+
 import com.example.tutorsearcher.User;
 import com.example.tutorsearcher.Tutor;
 import com.example.tutorsearcher.Tutee;
@@ -23,12 +25,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.firebase.ui.auth.AuthUI.TAG;
+
 public class DBAccessor {
     private boolean exists;
     private boolean loggedin;
-    ArrayList<Request> rlist;
+    private ArrayList<Request> rlist;
 
-    private FirebaseFirestore db;
+    public FirebaseFirestore db;
     /**
      * Constructor method
      * Initializes instance of the Firestore database
@@ -61,11 +65,11 @@ public class DBAccessor {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         if( document.exists() ){
                             exists = true;
-                            System.out.println("User exists!");
+                            Log.d("success","User exists!");
                         }
                     }
                 } else {
-                    System.out.println("Error getting documents");
+                    Log.d("failure","User doesn't exist");
                 }
             }
         });
@@ -132,13 +136,13 @@ public class DBAccessor {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        System.out.println("DocumentSnapshot added with user email");
+                        Log.d("success","DocumentSnapshot added with user email");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        System.out.println("Error adding document");
+                        Log.d("failure", "Error adding document");
                     }
                 });
     }
@@ -160,13 +164,13 @@ public class DBAccessor {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        System.out.println("DocumentSnapshot written with ID: " + documentReference.getId());
+                        Log.d("success", "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        System.out.println("Error adding document");
+                        Log.d("failure", "Error adding document");
                     }
                 });
     }
@@ -187,12 +191,12 @@ public class DBAccessor {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                System.out.println(document.getId() + " => " + document.getData());
+//                                Log.d(document.getId() + " => " + document.getData());
                                 Request r = new Request(String.valueOf(document.get("tutee")), String.valueOf(document.get("tutor")), String.valueOf(document.get("status")), String.valueOf(document.get("course")), String.valueOf(document.get("time")));
                                 rlist.add(r);
                             }
                         } else {
-                            System.out.println("Error getting documents: ");
+                            Log.d("failure", "Error getting documents: ");
                         }
                     }
                 });
