@@ -3,7 +3,7 @@ package com.example.tutorsearcher;
 import java.util.ArrayList;
 
 public class Tutor extends User {
-    private ArrayList<Availability> availabilityList;
+    private ArrayList<String> availabilityList;
     private ArrayList<String> courses;
     private int numRatings;
     private double rating;
@@ -13,14 +13,14 @@ public class Tutor extends User {
     {
         super(email_, "tutor");
         // set defaults
-        availabilityList = new ArrayList<Availability>();
+        availabilityList = new ArrayList<String>();
         courses = new ArrayList<String>();
         numRatings = 0;
         rating = 0;
     }
 
     // getters
-    public ArrayList<Availability> getAvailability()
+    public ArrayList<String> getAvailability()
     {
         return availabilityList;
     }
@@ -32,7 +32,7 @@ public class Tutor extends User {
     public double getRating() {return rating;}
 
     // setters
-    public void setAvailability(ArrayList<Availability> newAvailabilityList){ availabilityList = newAvailabilityList; }
+    public void setAvailability(ArrayList<String> newAvailabilityList){ availabilityList = newAvailabilityList; }
     public void setCourses(ArrayList<String> newCourses){ courses = newCourses; } // *** added setter for courses
     public void addCourses(String addCourse){ courses.add(addCourse); }
     public void setNumRatings(int newNumRatings) {numRatings = newNumRatings;}

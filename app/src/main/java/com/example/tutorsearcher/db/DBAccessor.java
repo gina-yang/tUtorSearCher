@@ -1,5 +1,9 @@
 package com.example.tutorsearcher.db;
 
+import com.example.tutorsearcher.User;
+import com.example.tutorsearcher.Tutor;
+import com.example.tutorsearcher.Tutee;
+
 import androidx.annotation.NonNull;
 
 import com.example.tutorsearcher.Availability;
@@ -20,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DBAccessor {
-    public boolean loggedin;
+    private boolean loggedin;
 
     private FirebaseFirestore db;
 
@@ -97,13 +101,13 @@ public class DBAccessor {
     /**
      * Adds availability of tutor to database
      * @param email email of tutor
-     * @param a Availability object
+     * @param a String representing availability
      */
-    public void addAvailability(String email, Availability a){
+    public void addAvailability(String email, String a){
         Map<String, Object> availability = new HashMap<>();
-        availability.put("day", a.day);
-        availability.put("starttime", a.starttime);
-        availability.put("endtime", a.endtime);
+        String[] sp = a.split(" ", 2);
+        availability.put("day", sp[0]);
+        availability.put("starttime", sp[1]);
 
         db.collection("tutors").document(email)
                 .collection("availabilitylist")
@@ -126,21 +130,41 @@ public class DBAccessor {
      * TODO
      * Gets all of a tutor's availability
      * @param email tutor's email
-     * @return ArrayList of availability objects
+     * @return ArrayList of Strings representing availability
      */
-    public ArrayList<Availability> getAllAvailability(String email){
-        ArrayList<Availability> alist = new ArrayList<Availability>();
+    public ArrayList<String> getAllAvailability(String email){
+        ArrayList<String> alist = new ArrayList<String>();
 
         return alist;
     }
 
     /**
-     * TODO
      * Adds a tutee request to the database
      * @param email tutee's email
      */
     public void addRequest(String email, Request r){
         Map<String, Object> request = new HashMap<>();
+        request.put("course", r.course);
+        request.put("status", r.status);
+        request.put("starttime", r.starttime);
+        request.put("endtime", r.endtime);
+        request.put("tutor", r.tutorEmail);
+        request.put("tutee", r.tuteeEmail);
+
+        db.collection("requests")
+                .add(request)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        System.out.println("DocumentSnapshot written with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Error adding document");
+                    }
+                });
     }
 
     /**
@@ -148,19 +172,78 @@ public class DBAccessor {
      * Gets all requests associated with a user (either tutor or tutee)
      * @return ArrayList of Request objects
      */
-    public ArrayList<Request> getRequests(){
+    public ArrayList<Request> getAllRequests(){
         ArrayList<Request> r = new ArrayList<Request>();
+
         return r;
     }
 
-    // Get availability at certain time
+    // Get availability at certain time?
 
-    // Update tutor profile (Ben)
+    // Update user profile [works for both tutor and tutee using polymorphism] (Ben)
+    // Takes in a User and updates all fields in Firebase
+    /**
+     * Update user profile [works for both tutor and tutee using polymorphism]
+     * @param u user to be updated
+     */
+    public void updateProfile(User u)
+    {
+        // create new map and courses and availabilities
+        Map<String, Object> profileMap = new HashMap<>();
 
-    // Update tutee profile (Ben)
+        profileMap.put("email", u.getEmail());
+        profileMap.put("age", u.getAge());
+        profileMap.put("gender", u.getGender());
+        profileMap.put("name", u.getName());
+        profileMap.put("pic", u.getProfilePic());
+
+        // if it's a tutor, add tutor-specific fields to map and update courses and availabilities
+        if(u.getType()=="tutor")
+        {
+            profileMap.put("numratings", u.getNumRatings());
+            profileMap.put("rating", u.getRating());
+            profileMap.put("courses", u.getCourses());
+            profileMap.put("availability", u.getAvailability());
+        }
+
+        // connect to DB and overwrite this profile
+        db.collection(u.getType()+"s").document(u.getEmail())
+                .update(profileMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        System.out.println("Profile overwritten with user email");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("Error adding document");
+                    }
+                });
+    }
 
     // Get profile (Ben)
-
+    // Automatically creates a Tutor or Tutee based on the role in the email
+    // Returns that object
+    /**
+     * Fetches the profile of a user
+     * @param email user email
+     * @param role user role (tutee or tutor)
+     * @return a User class instance (Tutor or Tutee) with info corresponding to profile
+     */
+    public User getProfile(String email, String role)
+    {
+        // Check DB for email
+        // If found...
+            // Determine type (tutor or tutee) of this account
+            // Appropriately create a Tutor or Tutee instance
+            // Add all the generic User info
+            // If it's a tutor, add all Tutor-specific info
+        // If not found...
+            // return null
+        return null;
+    }
 }
 
 
