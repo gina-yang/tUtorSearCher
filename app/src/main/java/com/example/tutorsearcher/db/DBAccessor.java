@@ -144,35 +144,6 @@ public class DBAccessor {
     }
 
     /**
-     * TODO needs to be fixed (how to update array in firebase)
-     * Adds availability of tutor to database
-     * @param email email of tutor
-     * @param a String representing availability
-     */
-    public void addAvailability(String email, String a){
-        Map<String, Object> availability = new HashMap<>();
-        String[] sp = a.split(" ", 2);
-        availability.put("day", sp[0]);
-        availability.put("starttime", sp[1]);
-
-        db.collection("tutors").document(email)
-                .collection("availabilitylist")
-                .add(availability)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        System.out.println("DocumentSnapshot written with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        System.out.println("Error adding document");
-                    }
-                });
-    }
-
-    /**
      * Adds a tutee request to the database
      * @param email tutee's email
      */
