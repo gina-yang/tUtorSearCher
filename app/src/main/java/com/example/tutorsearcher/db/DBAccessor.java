@@ -127,18 +127,6 @@ public class DBAccessor {
     }
 
     /**
-     * TODO
-     * Gets all of a tutor's availability
-     * @param email tutor's email
-     * @return ArrayList of Strings representing availability
-     */
-    public ArrayList<String> getAllAvailability(String email){
-        ArrayList<String> alist = new ArrayList<String>();
-
-        return alist;
-    }
-
-    /**
      * Adds a tutee request to the database
      * @param email tutee's email
      */
@@ -146,8 +134,7 @@ public class DBAccessor {
         Map<String, Object> request = new HashMap<>();
         request.put("course", r.course);
         request.put("status", r.status);
-        request.put("starttime", r.starttime);
-        request.put("endtime", r.endtime);
+        request.put("time", r.time);
         request.put("tutor", r.tutorEmail);
         request.put("tutee", r.tuteeEmail);
 
@@ -168,14 +155,31 @@ public class DBAccessor {
     }
 
     /**
-     * TODO
-     * Gets all requests associated with a user (either tutor or tutee)
+     * Gets all requests associated with a user
+     * @param email user's email
+     * @param role user's role (tutor or tutee)
      * @return ArrayList of Request objects
      */
-    public ArrayList<Request> getAllRequests(){
-        ArrayList<Request> r = new ArrayList<Request>();
-
-        return r;
+    public ArrayList<Request> getAllRequests(String email, String role){
+        final ArrayList<Request> rlist = new ArrayList<Request>(); // ? A way to make it not final?
+        CollectionReference reqRef = db.collection("requests");
+        reqRef.whereEqualTo(role, email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                System.out.println(document.getId() + " => " + document.getData());
+                                Request r = new Request(String.valueOf(document.get("tutee")), String.valueOf(document.get("tutor")), String.valueOf(document.get("status")), String.valueOf(document.get("course")), String.valueOf(document.get("time")));
+                                rlist.add(r);
+                            }
+                        } else {
+                            System.out.println("Error getting documents: ");
+                        }
+                    }
+                });
+        return rlist;
     }
 
     // Get availability at certain time?
