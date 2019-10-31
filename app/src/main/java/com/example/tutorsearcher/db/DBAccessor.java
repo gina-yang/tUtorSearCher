@@ -24,10 +24,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DBAccessor {
+    private boolean exists;
     private boolean loggedin;
+    ArrayList<Request> rlist;
 
     private FirebaseFirestore db;
-
     /**
      * Constructor method
      * Initializes instance of the Firestore database
@@ -50,7 +51,7 @@ public class DBAccessor {
         else if( role.equals("tutee")){
             roleColl = db.collection("tutees");
         }
-        loggedin = false;
+        exists = false;
         Query query = roleColl.whereEqualTo("email", email);
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -59,8 +60,8 @@ public class DBAccessor {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         if( document.exists() ){
-                            loggedin = true;
-                            System.out.println("User logged in!");
+                            exists = true;
+                            System.out.println("User exists!");
                         }
                     }
                 } else {
@@ -68,6 +69,50 @@ public class DBAccessor {
                 }
             }
         });
+        return exists;
+    }
+
+    /**
+     * Checks if user with given email, password, and role exists in the database
+     * @param email email
+     * @param password password
+     * @param role user role (tutor or tutee)
+     * @return false if login failed. true if login exists
+     */
+    public boolean validateUser(String email, String password, String role){
+        loggedin = false;
+        if( !this.isNewUser(email, role) ){
+            return loggedin;  // User email doesn't exist in database; return false
+        }
+        // Otherwise, check for password
+        if( role.equals("tutor")){
+            db.collection("tutors").whereEqualTo("email", email).whereEqualTo("password", password)
+                .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                loggedin = true;
+                            } else {
+                                loggedin = false;
+                            }
+                        }
+                    });
+        }
+        else if( role.equals("tutee")){
+            db.collection("tutees").whereEqualTo("email", email).whereEqualTo("password", password)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                loggedin = true;
+                            } else {
+                                loggedin = false;
+                            }
+                        }
+                    });
+        }
         return loggedin;
     }
 
@@ -99,6 +144,7 @@ public class DBAccessor {
     }
 
     /**
+     * TODO needs to be fixed (how to update array in firebase)
      * Adds availability of tutor to database
      * @param email email of tutor
      * @param a String representing availability
@@ -161,7 +207,7 @@ public class DBAccessor {
      * @return ArrayList of Request objects
      */
     public ArrayList<Request> getAllRequests(String email, String role){
-        final ArrayList<Request> rlist = new ArrayList<Request>(); // ? A way to make it not final?
+        rlist = new ArrayList<Request>(); // ? A way to make it not final?
         CollectionReference reqRef = db.collection("requests");
         reqRef.whereEqualTo(role, email)
                 .get()
