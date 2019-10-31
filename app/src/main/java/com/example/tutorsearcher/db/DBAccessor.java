@@ -297,6 +297,48 @@ public class DBAccessor {
 
         return result[0];
     }
+
+    /**
+     * Returns all the tutors who match a given course and timeslot
+     * @param course the course
+     * @param timeslot the timeslot
+     * @return an ArrayList of User objects corresponding to Tutors who match the course and timeslot
+     */
+    public ArrayList<User> search(String course, String timeslot)
+    {
+        // Query against the DB
+        final String course_ = course;
+        final String timeslot_ = timeslot;
+        final ArrayList<String> emails = new ArrayList<String>();
+        db.collection("tutors")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            // go through all documents in the collection...
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Map<String, Object> docData = document.getData();
+                                ArrayList<String> courses = (ArrayList<String>)docData.get("courses");
+                                ArrayList<String> availability = (ArrayList<String>)docData.get("availabilityList");
+                                // if this document has the correct course and timeslot...
+                                if(courses.contains(course_) && availability.contains(timeslot_))
+                                {
+                                    emails.add(document.getId()); // add this doc ID (the email) to the emails list
+                                }
+                            }
+                        }
+                    }
+                });
+
+        // get profiles of all matching documents (by email)
+        ArrayList<User> matchingTutors = new ArrayList<User>();
+        for(String email : emails)
+        {
+            matchingTutors.add(getProfile(email, "tutor"));
+        }
+        return matchingTutors;
+    }
 }
 
 
