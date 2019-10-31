@@ -6,7 +6,6 @@ import com.example.tutorsearcher.Tutee;
 
 import androidx.annotation.NonNull;
 
-import com.example.tutorsearcher.Availability;
 import com.example.tutorsearcher.Request;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -14,6 +13,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -234,15 +234,64 @@ public class DBAccessor {
      */
     public User getProfile(String email, String role)
     {
+        final String role_ = role;
+        final User[] result = new User[1]; // ugly hack to get around anonymous class problem, as detailed in : https://stackoverflow.com/questions/5977735/setting-outer-variable-from-anonymous-inner-class
+
         // Check DB for email
-        // If found...
-            // Determine type (tutor or tutee) of this account
-            // Appropriately create a Tutor or Tutee instance
-            // Add all the generic User info
-            // If it's a tutor, add all Tutor-specific info
-        // If not found...
-            // return null
-        return null;
+        DocumentReference docRef = db.collection(role+"s").document(email);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Map<String, Object> docData = document.getData();
+                        String email = (String)docData.get("email");
+
+                        // Appropriately create a Tutor or Tutee instance
+                        User u;
+                        if(role_=="tutor")
+                        {
+                            u = new Tutor(email);
+                        }
+                        else
+                        {
+                            u = new Tutee(email);
+                        }
+
+                        // Add all the generic User info
+                        int age = (Integer)docData.get("email");
+                        String gender = (String)docData.get("gender");
+                        String name = (String)docData.get("name");
+                        String profilePic = (String)docData.get("pic");
+                        u.setAge(age);
+                        u.setGender(gender);
+                        u.setName(name);
+                        u.setProfilePic(profilePic);
+
+                        // If it's a tutor, add all Tutor-specific info
+                        if(role_=="tutor")
+                        {
+                            int numRatings = (Integer)docData.get("numratings");
+                            double rating = (Double)docData.get("rating");
+                            ArrayList<String> courses = (ArrayList<String>)docData.get("courses");
+                            ArrayList<String> availability = (ArrayList<String>)docData.get("availabilityList");
+                            u.setNumRatings(numRatings);
+                            u.setRating(rating);
+                            u.setCourses(courses);
+                            u.setAvailability(availability);
+                        }
+                        result[0] = u;
+                    } else {
+                        result[0] = null;
+                    }
+                } else {
+                    result[0] = null;
+                }
+            }
+        });
+
+        return result[0];
     }
 }
 
