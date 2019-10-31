@@ -1,5 +1,6 @@
 package com.example.tutorsearcher;
 
+// TODO: DELETE
 public class Availability {
     // Change this to "Day" object later for calendar
     public String day;
