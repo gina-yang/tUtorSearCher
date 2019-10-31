@@ -198,7 +198,7 @@ public class DBAccessor {
         profileMap.put("pic", u.getProfilePic());
 
         // if it's a tutor, add tutor-specific fields to map and update courses and availabilities
-        if(u.getType()=="tutor")
+        if(u.getType().equals("tutor"))
         {
             profileMap.put("numratings", u.getNumRatings());
             profileMap.put("rating", u.getRating());
@@ -250,7 +250,7 @@ public class DBAccessor {
 
                         // Appropriately create a Tutor or Tutee instance
                         User u;
-                        if(role_=="tutor")
+                        if(role_.equals("tutor"))
                         {
                             u = new Tutor(email);
                         }
@@ -270,7 +270,7 @@ public class DBAccessor {
                         u.setProfilePic(profilePic);
 
                         // If it's a tutor, add all Tutor-specific info
-                        if(role_=="tutor")
+                        if(role_.equals("tutor"))
                         {
                             int numRatings = (Integer)docData.get("numratings");
                             double rating = (Double)docData.get("rating");
