@@ -22,8 +22,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class DBAccessor {
     private boolean loggedin;
@@ -237,176 +235,6 @@ public class DBAccessor {
     public User getProfile(String email, String role)
     {
         // Check DB for email
-<<<<<<< HEAD
-        DocumentReference docRef = db.collection(role+"s").document(email);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        String email = (String)document.get("email");
-
-                        // Appropriately create a Tutor or Tutee instance
-                        User u;
-                        if(role_.equals("tutor"))
-                        {
-                            u = new Tutor(email);
-                        }
-                        else
-                        {
-                            u = new Tutee(email);
-                        }
-
-                        // Add all the generic User info
-                        int age = (Integer)document.get("email");
-                        String gender = (String)document.get("gender");
-                        String name = (String)document.get("name");
-                        String profilePic = (String)document.get("pic");
-                        u.setAge(age);
-                        u.setGender(gender);
-                        u.setName(name);
-                        u.setProfilePic(profilePic);
-
-                        // If it's a tutor, add all Tutor-specific info
-                        if(role_.equals("tutor"))
-                        {
-                            int numRatings = (Integer)document.get("numratings");
-                            double rating = (Double)document.get("rating");
-                            ArrayList<String> courses = (ArrayList<String>)document.get("courses");
-                            ArrayList<String> availability = (ArrayList<String>)document.get("availability");
-                            u.setNumRatings(numRatings);
-                            u.setRating(rating);
-                            u.setCourses(courses);
-                            u.setAvailability(availability);
-                        }
-                        result[0] = u;
-                    } else {
-                        result[0] = null;
-                    }
-                } else {
-                    result[0] = null;
-                }
-            }
-        });
-
-        return result[0];
-    }
-
-    // inner class to help with search
-//    class searchThread implements Runnable
-//    {
-//        final ArrayList<String> emails;
-//        final String course;
-//        final String timeslot;
-//        final FirebaseFirestore threadDB;
-//        boolean doneFlag;
-//
-//        public searchThread(ArrayList<String> emails_, String course_, String timeslot_)
-//        {
-//            emails = emails_;
-//            course = course_;
-//            timeslot = timeslot_;
-//            threadDB = FirebaseFirestore.getInstance();
-//            doneFlag = false;
-//            Log.d("ben", "searchThread constructed");
-//        }
-//        public void run(){
-//            Log.d("ben", "searchThread starting");
-//            threadDB.collection("tutors")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        try {
-//                            if (task.isSuccessful()) {
-//                                // go through all documents in the collection...
-//                                for (QueryDocumentSnapshot document : task.getResult()) {
-//                                    ArrayList<String> courses = (ArrayList<String>) document.get("courses");
-//                                    ArrayList<String> availability = (ArrayList<String>) document.get("availability");
-//                                    if (courses.contains(course) && availability.contains(timeslot)) {
-//                                        Log.d("ben", "email found, adding email=" + document.getId());
-//                                        emails.add(document.getId()); // add this doc ID (the email) to the emails list
-//                                    }
-//                                }
-//                                Log.d("ben", "finished looking thru docs");
-//                            }
-//                            Log.d("ben", "finished task successful block");
-//                        }
-//                        finally {
-//                            Log.d("ben", "in finally block");
-//                            doneFlag = true;
-//                        }
-//                    }
-//                });
-//            while(!doneFlag){ /* wait */ }
-//            Log.d("ben", "searchThread finished");
-//        }
-//    }
-
-    /**
-     * Returns all the tutors who match a given course and timeslot
-     * @param course the course
-     * @param timeslot the timeslot
-     * @return an ArrayList of User objects corresponding to Tutors who match the course and timeslot
-     */
-    public ArrayList<User> search(String course, String timeslot)
-    {
-        Log.d("ben", "search start");
-
-        // Query against the DB
-        final ArrayList<String> emails = new ArrayList<String>();
-        final String course_ = course;
-        final String timeslot_ = timeslot;
-        final boolean[] doneFlag = new boolean[1];
-//        Thread queryThread = new Thread(new searchThread(emails, course, timeslot));
-//        queryThread.start();
-        Log.d("ben", "pre db get");
-        db.collection("tutors")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        try {
-                            if (task.isSuccessful()) {
-                                // go through all documents in the collection...
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    ArrayList<String> courses = (ArrayList<String>) document.get("courses");
-                                    ArrayList<String> availability = (ArrayList<String>) document.get("availability");
-                                    if (courses.contains(course_) && availability.contains(timeslot_)) {
-                                        Log.d("ben", "email found, adding email=" + document.getId());
-                                        emails.add(document.getId()); // add this doc ID (the email) to the emails list
-                                    }
-                                }
-                                Log.d("ben", "finished looking thru docs");
-                            }
-                            Log.d("ben", "finished task successful block");
-                        }
-                        finally {
-                            Log.d("ben", "in finally block");
-                            doneFlag[0] = true;
-                        }
-                    }
-                });
-        Log.d("ben", "post db get");
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        while(!doneFlag[0]){ /* wait */ }
-
-        // get profiles of all matching documents (by email)
-        ArrayList<User> matchingTutors = new ArrayList<User>();
-        Log.d("ben", "Emails size="+((Integer)emails.size()).toString());
-        for(String email : emails)
-        {
-            Log.d("ben", "adding profile for email="+email);
-            matchingTutors.add(getProfile(email, "tutor"));
-        }
-        return matchingTutors;
-=======
         // If found...
             // Determine type (tutor or tutee) of this account
             // Appropriately create a Tutor or Tutee instance
@@ -415,7 +243,6 @@ public class DBAccessor {
         // If not found...
             // return null
         return null;
->>>>>>> parent of a96dfd4... finished layout of search activity
     }
 }
 
