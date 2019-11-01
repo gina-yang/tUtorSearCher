@@ -19,19 +19,19 @@ public class HomeViewModel extends ViewModel {
         mText = new MutableLiveData<>();
         mText.setValue("This is home fragment");
 
-        // TODO: DELETE
-        BenTest();
+//        // TODO: DELETE
+//        BenTest();
     }
 
     public LiveData<String> getText() {
         return mText;
     }
 
-    // TODO: DELETE
-    public void BenTest()
-    {
-        DBAccessor dba = new DBAccessor();
-        ArrayList<User> results = dba.search("CS 310", "Mon 14");
-        Log.d("ben", "results size: "+((Integer)(results.size())).toString());
-    }
+//    // TODO: DELETE
+//    public void BenTest()
+//    {
+//        DBAccessor dba = new DBAccessor();
+//        ArrayList<User> results = dba.search("CS 310", "Mon 14");
+//        Log.d("ben", "results size: "+((Integer)(results.size())).toString());
+//    }
 }
