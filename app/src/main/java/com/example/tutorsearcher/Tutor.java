@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Tutor extends User {
     private ArrayList<String> availabilityList;
     private ArrayList<String> courses;
-    private int numRatings;
+    private long numRatings;
     private double rating;
 
     // Constructor
@@ -28,14 +28,14 @@ public class Tutor extends User {
     {
         return courses;
     }
-    public int getNumRatings() {return numRatings;}
+    public long getNumRatings() {return numRatings;}
     public double getRating() {return rating;}
 
     // setters
     public void setAvailability(ArrayList<String> newAvailabilityList){ availabilityList = newAvailabilityList; }
     public void setCourses(ArrayList<String> newCourses){ courses = newCourses; } // *** added setter for courses
     public void addCourses(String addCourse){ courses.add(addCourse); }
-    public void setNumRatings(int newNumRatings) {numRatings = newNumRatings;}
+    public void setNumRatings(long newNumRatings) {numRatings = newNumRatings;}
     public void setRating(double newRating) {rating = newRating;}
     public void addRating(double newRating)
     {
