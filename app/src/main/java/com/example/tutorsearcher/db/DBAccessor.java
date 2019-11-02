@@ -29,7 +29,9 @@ import java.util.List;
 import java.util.Map;
 
 public class DBAccessor {
+    private boolean exists;
     private boolean loggedin;
+    private ArrayList<Request> rlist;
 
     private FirebaseFirestore db;
 
@@ -55,7 +57,7 @@ public class DBAccessor {
         else if( role.equals("tutee")){
             roleColl = db.collection("tutees");
         }
-        loggedin = false;
+        exists = false;
         Query query = roleColl.whereEqualTo("email", email);
 
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -64,15 +66,59 @@ public class DBAccessor {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         if( document.exists() ){
-                            loggedin = true;
-                            System.out.println("User logged in!");
+                            exists = true;
+                            Log.d("success","User exists!");
                         }
                     }
                 } else {
-                    System.out.println("Error getting documents");
+                    Log.d("failure","User doesn't exist");
                 }
             }
         });
+        return exists;
+    }
+
+    /**
+     * Checks if user with given email, password, and role exists in the database
+     * @param email email
+     * @param password password
+     * @param role user role (tutor or tutee)
+     * @return false if login failed. true if login exists
+     */
+    public boolean validateUser(String email, String password, String role){
+        loggedin = false;
+        if( !this.isNewUser(email, role) ){
+            return loggedin;  // User email doesn't exist in database; return false
+        }
+        // Otherwise, check for password
+        if( role.equals("tutor")){
+            db.collection("tutors").whereEqualTo("email", email).whereEqualTo("password", password)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                loggedin = true;
+                            } else {
+                                loggedin = false;
+                            }
+                        }
+                    });
+        }
+        else if( role.equals("tutee")){
+            db.collection("tutees").whereEqualTo("email", email).whereEqualTo("password", password)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                loggedin = true;
+                            } else {
+                                loggedin = false;
+                            }
+                        }
+                    });
+        }
         return loggedin;
     }
 
@@ -92,55 +138,15 @@ public class DBAccessor {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        System.out.println("DocumentSnapshot added with user email");
+                        Log.d("success","DocumentSnapshot added with user email");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        System.out.println("Error adding document");
+                        Log.d("failure", "Error adding document");
                     }
                 });
-    }
-
-    /**
-     * Adds availability of tutor to database
-     * @param email email of tutor
-     * @param a String representing availability
-     */
-    public void addAvailability(String email, String a){
-        Map<String, Object> availability = new HashMap<>();
-        String[] sp = a.split(" ", 2);
-        availability.put("day", sp[0]);
-        availability.put("starttime", sp[1]);
-
-        db.collection("tutors").document(email)
-                .collection("availabilitylist")
-                .add(availability)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        System.out.println("DocumentSnapshot written with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        System.out.println("Error adding document");
-                    }
-                });
-    }
-
-    /**
-     * TODO
-     * Gets all of a tutor's availability
-     * @param email tutor's email
-     * @return ArrayList of Strings representing availability
-     */
-    public ArrayList<String> getAllAvailability(String email){
-        ArrayList<String> alist = new ArrayList<String>();
-
-        return alist;
     }
 
     /**
@@ -151,39 +157,53 @@ public class DBAccessor {
         Map<String, Object> request = new HashMap<>();
         request.put("course", r.course);
         request.put("status", r.status);
-        request.put("starttime", r.starttime);
-        request.put("endtime", r.endtime);
-        request.put("tutor", r.tutorEmail);
-        request.put("tutee", r.tuteeEmail);
+        request.put("time", r.time);
+        request.put("tutor", r.tutor);
+        request.put("tutee", r.tutee);
 
         db.collection("requests")
                 .add(request)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        System.out.println("DocumentSnapshot written with ID: " + documentReference.getId());
+                        Log.d("success", "DocumentSnapshot written with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        System.out.println("Error adding document");
+                        Log.d("failure", "Error adding document");
                     }
                 });
     }
 
     /**
-     * TODO
-     * Gets all requests associated with a user (either tutor or tutee)
+     * Gets all requests associated with a user
+     * @param email user's email
+     * @param role user's role (tutor or tutee)
      * @return ArrayList of Request objects
      */
-    public ArrayList<Request> getAllRequests(){
-        ArrayList<Request> r = new ArrayList<Request>();
-
-        return r;
+    public ArrayList<Request> getAllRequests(String email, String role){
+        rlist = new ArrayList<Request>(); // ? A way to make it not final?
+        CollectionReference reqRef = db.collection("requests");
+        reqRef.whereEqualTo(role, email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d(document.getId() + " => " + document.getData());
+                                Request r = new Request(String.valueOf(document.get("tutee")), String.valueOf(document.get("tutor")), String.valueOf(document.get("status")), String.valueOf(document.get("course")), String.valueOf(document.get("time")));
+                                rlist.add(r);
+                            }
+                        } else {
+                            Log.d("failure", "Error getting documents: ");
+                        }
+                    }
+                });
+        return rlist;
     }
-
-    // Get availability at certain time?
 
     // Update user profile [works for both tutor and tutee using polymorphism] (Ben)
     // Takes in a User and updates all fields in Firebase
