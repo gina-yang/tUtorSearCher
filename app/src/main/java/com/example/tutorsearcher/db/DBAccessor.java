@@ -321,7 +321,7 @@ public class DBAccessor {
     public void search(final String course, final String timeslot, final searchCommandWrapper wrapper)
     {
         // Query against the DB
-        final ArrayList<String> emails = new ArrayList<String>();
+        final ArrayList<User> users = new ArrayList<User>();
 
         db.collection("tutors")
                 .get()
@@ -337,12 +337,23 @@ public class DBAccessor {
                                 // if this document has the correct course and timeslot...
                                 if(courses.contains(course) && availability.contains(timeslot))
                                 {
-                                    emails.add(document.getId()); // add this doc ID (the email) to the emails list
+                                    //this tutor matches the search preferences
+                                    User u = new Tutor((String)document.get("email"));
+                                    // Add all the generic User info
+                                    long age = (Long)document.get("age");
+                                    String gender = (String)document.get("gender");
+                                    String name = (String)document.get("name");
+                                    String profilePic = (String)document.get("pic");
+                                    u.setAge(age);
+                                    u.setGender(gender);
+                                    u.setName(name);
+                                    u.setProfilePic(profilePic);
+                                    users.add(u); // add this doc ID (the email) to the emails list
                                 }
                             }
                         }
                         // finally, execute the searchCommandWrapper
-                        wrapper.execute(emails);
+                        wrapper.execute2(users);
                     }
                 });
     }

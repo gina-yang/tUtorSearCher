@@ -32,14 +32,14 @@ public class HomeViewModel extends ViewModel {
     // This class just contains one method: execute
     // Which tells you what to do when you have gotten the ArrayList<User> of search results
     // This is necessary because you need some way of passing the action to execute post-load via a method parameter
-    public class printSearchResultWrapper extends searchCommandWrapper
+   /* public class printSearchResultWrapper extends searchCommandWrapper
     {
         // email_results is an ArrayList of all the matching emails that fit the search criteria
         public void execute(ArrayList<String> email_results)
         {
             Log.d("ben", "email_results size: "+((Integer)(email_results.size())).toString());
         }
-    }
+    }*/
 
     public class printProfileNameWrapper extends getProfileCommandWrapper
     {
@@ -61,10 +61,12 @@ public class HomeViewModel extends ViewModel {
     // TODO: DELETE
     public void BenTest()
     {
-        DBAccessor dba = new DBAccessor();
+        /*DBAccessor dba = new DBAccessor();
         searchCommandWrapper resultWrapper = new printSearchResultWrapper();
         dba.search("CS 310", "Mon 14", resultWrapper);
         dba.getProfile("janedoe@usc.edu", "tutor", new printProfileNameWrapper());
         dba.getProfile("janedoe@usc.edu", "tutor", new printProfileGenderWrapper());
+
+         */
     }
 }
