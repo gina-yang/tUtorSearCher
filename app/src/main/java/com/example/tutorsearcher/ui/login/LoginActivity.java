@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -31,6 +32,7 @@ import com.example.tutorsearcher.Tutor;
 import com.example.tutorsearcher.User;
 import com.example.tutorsearcher.activity.MainActivity;
 import com.example.tutorsearcher.db.DBAccessor;
+import com.example.tutorsearcher.db.validateUserCommandWrapper;
 import com.example.tutorsearcher.ui.login.LoginViewModel;
 import com.example.tutorsearcher.ui.login.LoginViewModelFactory;
 
@@ -168,32 +170,30 @@ public class LoginActivity extends AppCompatActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
+                            passwordEditText.getText().toString(), loginSpinner.getSelectedItem().toString());
                     registerViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
+                            passwordEditText.getText().toString(), loginSpinner.getSelectedItem().toString());
                 }
                 return false;
             }
         });
 
-        //what happens when we click in login button?
+        // What happens when we click on the login button?
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-
-                */
-               //TODO: authenticate login
-                // Steps: (Gina)
-                // Implement validation wrapper class in LoginViewModel
-                // Implement getProfile wrapper class in LoginView model
-                // Call db.validateUser() with impelemented wrapper class in LoginViewModel
-                // Call getProfile()
-                // Call LoginViewModel.login() here
-                //get the content of email field
-                openMainActivity();
+                class userExists extends validateUserCommandWrapper {
+                    public void doValidate(boolean success) {
+                        Log.d("doValidate status", Boolean.toString(success));
+                        if( success ){
+                            openMainActivity();
+                        }
+                        else {
+                            showLoginFailed(-1);
+                        }
+                    }
+                }
+                dba.validateUser(usernameEditText.getText().toString(), passwordEditText.getText().toString(), loginSpinner.getSelectedItem().toString(), new userExists());
             }
         });
 
@@ -225,6 +225,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
-        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+        Log.d("failedlogin", "failed");
+        // What happens when user credentials are wrong?
     }
 }

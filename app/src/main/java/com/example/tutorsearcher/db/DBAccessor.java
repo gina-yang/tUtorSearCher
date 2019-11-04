@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 public class DBAccessor {
-    private boolean exists;
-    private boolean loggedin;
     private ArrayList<Request> rlist;
 
     private FirebaseFirestore db;
@@ -81,9 +79,8 @@ public class DBAccessor {
      * @param email email
      * @param password password
      * @param r user role ("Tutor" or "Tutee")
-     * @return false if login failed. true if login successful (user exists)
      */
-    public boolean validateUser(final String email, final String password, String r, final validateUserCommandWrapper wrapper){
+    public void validateUser(final String email, final String password, String r, final validateUserCommandWrapper wrapper){
         final String role = r.toLowerCase();  // role is passed as "Tutor" or "Tutee" which doesn't match db
         Log.d("email", email);
         Log.d("password", password);
@@ -96,23 +93,22 @@ public class DBAccessor {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            loggedin = false;
+                            boolean lg = false;
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("userexists", document.getId() + " => " + document.getData());
-                                if( document.get("password").equals(password) ) {
+                                if( document.get("password").equals(password) ) { // Found a user with matching email
                                     Log.d("passmatch", document.getId() + " => " + document.getData());
-                                    loggedin = true;
+                                    lg = true;
                                     break;
                                 }
                             }
+                            wrapper.doValidate(lg);
                         } else {
                             Log.d("loginfailure", "Error getting documents: ", task.getException());
-                            loggedin = false;
+                            wrapper.doValidate(false);
                         }
                     }
                 });
-        Log.d("loggedin", Boolean.toString(loggedin));
-        return loggedin;
     }
 
     /**
@@ -188,7 +184,7 @@ public class DBAccessor {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Log.d(document.getId() + " => " + document.getData());
+//                              Log.d(document.getId() + " => " + document.getData());
                                 Request r = new Request(String.valueOf(document.get("tuteeName")), String.valueOf(document.get("tutorName")),
                                         String.valueOf(document.get("tuteeEmail")),String.valueOf(document.get("tutorEmail")),String.valueOf(document.get("status")),
                                         String.valueOf(document.get("course")), String.valueOf(document.get("time")));
