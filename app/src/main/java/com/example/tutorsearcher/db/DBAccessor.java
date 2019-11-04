@@ -173,12 +173,12 @@ public class DBAccessor {
     }
 
     /**
-     * Gets all requests associated with a user
+     * Gets all requests associated with a user and executes wrapper function
      * @param email user's email
      * @param role user's role (tutor or tutee)
-     * @return ArrayList of Request objects
+     * @param wrapper a getRequestsCommandWrapper class containing instructions to execute on load
      */
-    public ArrayList<Request> getAllRequests(String email, String role){
+    public void getAllRequests(String email, String role, final getRequestsCommandWrapper wrapper){
         rlist = new ArrayList<Request>(); // ? A way to make it not final?
         CollectionReference reqRef = db.collection("requests");
         reqRef.whereEqualTo(role, email)
@@ -194,12 +194,12 @@ public class DBAccessor {
                                         String.valueOf(document.get("course")), String.valueOf(document.get("time")));
                                 rlist.add(r);
                             }
+                            wrapper.execute(rlist);
                         } else {
                             Log.d("failure", "Error getting documents: ");
                         }
                     }
                 });
-        return rlist;
     }
 
     // Update user profile [works for both tutor and tutee using polymorphism] (Ben)
