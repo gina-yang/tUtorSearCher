@@ -125,6 +125,7 @@ public class RequestsFragment extends Fragment {
                     acceptButton.setWidth((int) (105 * scale + 0.5f));
                     acceptButton.setHeight((int) (60 * scale + 0.5f));
                     acceptButton.setText("Accept");
+                    acceptButton.setTextSize(25);
                     Button rejectButton = new Button(getContext());//button to reject
                     rejectButton.setGravity(Gravity.RIGHT);
                     rejectButton.setWidth((int) (105 * scale + 0.5f));
@@ -171,6 +172,7 @@ public class RequestsFragment extends Fragment {
                 requestInfo.setHeight((int) (85 * scale + 0.5f));
                 //get all the info from the tutee request
                 requestInfo.setText(request.tutorName + "\n"+request.course+" "+request.time);
+                requestInfo.setTextSize(20);
                 horizontalLayout.addView(requestInfo);
                 if(request.status.equals("pending"))
                 {//request is pending, so the user cannot see the tutor's email

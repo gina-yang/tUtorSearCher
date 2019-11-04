@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.tutorsearcher.User;
+import com.example.tutorsearcher.ui.login.LoginActivity;
 import com.squareup.picasso.Picasso;
 
 public class DashboardViewModel extends ViewModel {
