@@ -8,5 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-
+    <style name="SearchResultStyle">
+            android:layout_width="213dp"
+            android:layout_height="85dp"
+            android:baselineAligned="false"
+            android:text="Button"
+    </style>
 </resources>

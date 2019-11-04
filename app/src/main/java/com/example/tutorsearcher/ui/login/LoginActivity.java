@@ -26,14 +26,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tutorsearcher.R;
+import com.example.tutorsearcher.Tutee;
+import com.example.tutorsearcher.Tutor;
+import com.example.tutorsearcher.User;
 import com.example.tutorsearcher.activity.MainActivity;
+import com.example.tutorsearcher.db.DBAccessor;
 import com.example.tutorsearcher.ui.login.LoginViewModel;
 import com.example.tutorsearcher.ui.login.LoginViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
+    //this user variable will hold all of the data for the user that logs in/resgisters
+    //set it once the user succesfully logs in
+    //for now we will initialize it here as a tutor just for testing purposes
+    public static User loggedInUser = new Tutee("janeDoe@usc.edu");
     private LoginViewModel loginViewModel;
     private LoginViewModel registerViewModel;
+    DBAccessor dba = new DBAccessor();//to access the data
+    Spinner loginSpinner;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         final Button registerButton = findViewById(R.id.register_button);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
         //spinner stuff below
-        Spinner loginSpinner = (Spinner)findViewById(R.id.spinner);
+        loginSpinner = (Spinner)findViewById(R.id.spinner);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(LoginActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.LoginSpinnerOptions));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -176,7 +186,14 @@ public class LoginActivity extends AppCompatActivity {
 
                 */
                //TODO: authenticate login
-               openMainActivity();//after logging in go to the main acitivity page
+                // Steps: (Gina)
+                // Implement validation wrapper class in LoginViewModel
+                // Implement getProfile wrapper class in LoginView model
+                // Call db.validateUser() with impelemented wrapper class in LoginViewModel
+                // Call getProfile()
+                // Call LoginViewModel.login() here
+                //get the content of email field
+                openMainActivity();
             }
         });
 
