@@ -74,6 +74,7 @@ public class RequestsFragment extends Fragment {
                     acceptButton.setWidth((int) (105 * scale + 0.5f));
                     acceptButton.setHeight((int) (60 * scale + 0.5f));
                     acceptButton.setText("Accept");
+                    acceptButton.setTextSize(25);
                     Button rejectButton = new Button(getContext());//button to reject
                     rejectButton.setGravity(Gravity.RIGHT);
                     rejectButton.setWidth((int) (105 * scale + 0.5f));
