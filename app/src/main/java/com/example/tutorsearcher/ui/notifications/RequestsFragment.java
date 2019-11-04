@@ -142,6 +142,7 @@ public class RequestsFragment extends Fragment {
                 requestInfo.setHeight((int) (85 * scale + 0.5f));
                 //get all the info from the tutee request
                 requestInfo.setText(request.tutorName + "\n"+request.course+" "+request.time);
+                requestInfo.setTextSize(20);
                 horizontalLayout.addView(requestInfo);
                 if(request.status.equals("pending"))
                 {//request is pending, so the user cannot see the tutor's email
