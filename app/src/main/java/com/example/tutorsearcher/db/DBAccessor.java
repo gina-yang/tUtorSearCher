@@ -8,9 +8,7 @@ import com.example.tutorsearcher.Tutee;
 
 import androidx.annotation.NonNull;
 
-import com.example.tutorsearcher.Availability;
 import com.example.tutorsearcher.Request;
-import com.example.tutorsearcher.ui.home.HomeViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,8 +23,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import static android.icu.lang.UCharacter.toLowerCase;
+import static com.firebase.ui.auth.AuthUI.TAG;
 
 public class DBAccessor {
     private boolean exists;
@@ -43,82 +43,76 @@ public class DBAccessor {
         db = FirebaseFirestore.getInstance();
     }
 
-    /**
-     * Checks if user is new by looking in database
-     * @param email email to check
-     * @param role role to check
-     * @return boolean true if user is new
-     */
-    public boolean isNewUser(String email, String role){
-        CollectionReference roleColl = null;
-        if( role.equals("tutor")){
-            roleColl = db.collection("tutors");
-        }
-        else if( role.equals("tutee")){
-            roleColl = db.collection("tutees");
-        }
-        exists = false;
-        Query query = roleColl.whereEqualTo("email", email);
-
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        if( document.exists() ){
-                            exists = true;
-                            Log.d("success","User exists!");
-                        }
-                    }
-                } else {
-                    Log.d("failure","User doesn't exist");
-                }
-            }
-        });
-        return exists;
-    }
+//    /**
+//     * Checks if user is new by looking in database
+//     * @param email email to check
+//     * @param role role to check
+//     * @return boolean true if user is new
+//     */
+//    public boolean isNewUser(String email, String role){
+//        CollectionReference roleColl = null;
+//        if( role.equals("tutor")){
+//            roleColl = db.collection("tutors");
+//        }
+//        else if( role.equals("tutee")){
+//            roleColl = db.collection("tutees");
+//        }
+//        exists = false;
+//        Query query = roleColl.whereEqualTo("email", email);
+//
+//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        if( document.exists() ){
+//                            exists = true;
+//                            Log.d("success","User exists!");
+//                        }
+//                    }
+//                } else {
+//                    Log.d("failure","User doesn't exist");
+//                }
+//            }
+//        });
+//        return exists;
+//    }
 
     /**
      * Checks if user with given email, password, and role exists in the database
      * @param email email
      * @param password password
      * @param role user role (tutor or tutee)
-     * @return false if login failed. true if login exists
+     * @return false if login failed. true if login successful (user exists)
      */
     public boolean validateUser(String email, String password, String role){
-        loggedin = false;
-        if( !this.isNewUser(email, role) ){
-            return loggedin;  // User email doesn't exist in database; return false
-        }
-        // Otherwise, check for password
-        if( role.equals("tutor")){
-            db.collection("tutors").whereEqualTo("email", email).whereEqualTo("password", password)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                loggedin = true;
-                            } else {
-                                loggedin = false;
+        final String pw = password;  // To look up in db
+        role = role.toLowerCase();  // role is passed as "Tutor" or "Tutee" which doesn't match db
+        Log.d("email", email);
+        Log.d("password", password);
+        Log.d("role", role);
+
+        db.collection(role+"s")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("loginsuccess", document.getId() + " => " + document.getData());
+                                if( document.get("password").equals(pw) ) {
+                                    loggedin = true;
+                                    break;
+                                }
                             }
+                        } else {
+                            Log.d("loginfailure", "Error getting documents: ", task.getException());
+                            loggedin = false;
                         }
-                    });
-        }
-        else if( role.equals("tutee")){
-            db.collection("tutees").whereEqualTo("email", email).whereEqualTo("password", password)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                loggedin = true;
-                            } else {
-                                loggedin = false;
-                            }
-                        }
-                    });
-        }
+                    }
+                });
+        Log.d("userexists", Boolean.toString(loggedin));
         return loggedin;
     }
 
