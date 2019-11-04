@@ -14,6 +14,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import com.example.tutorsearcher.R;
+import com.example.tutorsearcher.User;
+import com.example.tutorsearcher.db.DBAccessor;
+import com.example.tutorsearcher.db.getProfileCommandWrapper;
+import com.example.tutorsearcher.ui.login.LoginActivity;
 import com.squareup.picasso.Picasso;
 
 public class DashboardFragment extends Fragment {
@@ -26,6 +30,9 @@ public class DashboardFragment extends Fragment {
                 ViewModelProviders.of(this).get(DashboardViewModel.class);
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
+        // get profile, which loads info into loggedInUser and populates view fields
+        User u = LoginActivity.loggedInUser;
+        new DBAccessor().getProfile(u.getEmail(), u.getType(), new LoadAndDisplayProfileWrapper(dashboardViewModel));
 
 
         ImageView profileImageView = getActivity().findViewById(R.id.profile_picture);
@@ -54,5 +61,23 @@ public class DashboardFragment extends Fragment {
         return root;
     }
 
+}
 
+class LoadAndDisplayProfileWrapper extends getProfileCommandWrapper
+{
+    private DashboardViewModel dashboardViewModel;
+
+    public LoadAndDisplayProfileWrapper(DashboardViewModel dashboardViewModel_)
+    {
+        dashboardViewModel = dashboardViewModel_;
+    }
+
+    public void execute(User u)
+    {
+        // update loggedInUser to u
+        LoginActivity.loggedInUser = u;
+
+        // populate profile view fields
+        // TODO: USE DASHBOARD VIEW TO POPULATE FIELDS
+    }
 }
