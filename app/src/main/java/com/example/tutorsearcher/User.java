@@ -71,7 +71,7 @@ public abstract class User
     public void setName(String newName){ name = newName; } // *** added setter for name
     public void setAge(long newAge){ age = newAge; }
     public void setGender(String newGender){ gender = newGender; }
-
+    public void setType(String type){this.type = type;}
     // TUTOR ONLY BELOW... these will be overridden by polymorphism in Tutor class---
     public void setAvailability(ArrayList<String> newAvailabilityList){
         throw new RuntimeException("This method is not supported except by an instance of a Tutor class");

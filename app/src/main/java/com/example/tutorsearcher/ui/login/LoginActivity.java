@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -27,6 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tutorsearcher.R;
+import com.example.tutorsearcher.Tutor;
+import com.example.tutorsearcher.User;
 import com.example.tutorsearcher.activity.MainActivity;
 import com.example.tutorsearcher.db.DBAccessor;
 import com.example.tutorsearcher.ui.login.LoginViewModel;
@@ -34,10 +35,13 @@ import com.example.tutorsearcher.ui.login.LoginViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
+    //this user variable will hold all of the data for the user that logs in/resgisters
+    //set it once the user succesfully logs in
+    //for now we will initialize it here as a tutor just for testing purposes
+    public static User loggedInUser = new Tutor("janeDoe@usc.edu");
     private LoginViewModel loginViewModel;
     private LoginViewModel registerViewModel;
-    DBAccessor dba = new DBAccessor();//to access the data
-    Spinner loginSpinner;
+    DBAccessor mDBAccessor = new DBAccessor();//to access the data
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         final Button registerButton = findViewById(R.id.register_button);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
         //spinner stuff below
-        loginSpinner = (Spinner)findViewById(R.id.spinner);
+        Spinner loginSpinner = (Spinner)findViewById(R.id.spinner);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(LoginActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.LoginSpinnerOptions));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -181,10 +185,8 @@ public class LoginActivity extends AppCompatActivity {
                 */
                //TODO: authenticate login
                 //get the content of email field
-                boolean userexists = dba.validateUser(usernameEditText.getText().toString(), passwordEditText.getText().toString(), loginSpinner.getSelectedItem().toString());
 
-                openMainActivity();//after logging in go to the main acitivity page
-
+               openMainActivity();//after logging in go to the main acitivity page
             }
         });
 
