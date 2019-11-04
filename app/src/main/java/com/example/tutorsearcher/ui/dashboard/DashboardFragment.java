@@ -1,9 +1,12 @@
 package com.example.tutorsearcher.ui.dashboard;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -11,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import com.example.tutorsearcher.R;
+import com.squareup.picasso.Picasso;
 
 public class DashboardFragment extends Fragment {
 
@@ -21,6 +25,21 @@ public class DashboardFragment extends Fragment {
         dashboardViewModel =
                 ViewModelProviders.of(this).get(DashboardViewModel.class);
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+
+
+        ImageView profileImageView = getActivity().findViewById(R.id.profile_picture);
+
+        String url = "http://i.imgur.com/DvpvklR.png";
+
+        if (profileImageView == null) {
+            Log.d("Help", "profile image view is null");
+        } else {
+            Picasso.get().load(url).fit().into(profileImageView);
+        }
+
+
+
 
 
         /*
@@ -34,4 +53,6 @@ public class DashboardFragment extends Fragment {
          */
         return root;
     }
+
+
 }
