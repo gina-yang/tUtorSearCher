@@ -41,7 +41,8 @@ public class LoginActivity extends AppCompatActivity {
     public static User loggedInUser = new Tutor("janeDoe@usc.edu");
     private LoginViewModel loginViewModel;
     private LoginViewModel registerViewModel;
-    DBAccessor mDBAccessor = new DBAccessor();//to access the data
+    DBAccessor dba = new DBAccessor();//to access the data
+    Spinner loginSpinner;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         final Button registerButton = findViewById(R.id.register_button);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
         //spinner stuff below
-        Spinner loginSpinner = (Spinner)findViewById(R.id.spinner);
+        loginSpinner = (Spinner)findViewById(R.id.spinner);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(LoginActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.LoginSpinnerOptions));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -184,9 +185,14 @@ public class LoginActivity extends AppCompatActivity {
 
                 */
                //TODO: authenticate login
+                // Steps: (Gina)
+                // Implement validation wrapper class in LoginViewModel
+                // Implement getProfile wrapper class in LoginView model
+                // Call db.validateUser() with impelemented wrapper class in LoginViewModel
+                // Call getProfile()
+                // Call LoginViewModel.login() here
                 //get the content of email field
-
-               openMainActivity();//after logging in go to the main acitivity page
+                openMainActivity();
             }
         });
 

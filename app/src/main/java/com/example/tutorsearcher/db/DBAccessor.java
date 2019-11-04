@@ -23,10 +23,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import static android.icu.lang.UCharacter.toLowerCase;
-import static com.firebase.ui.auth.AuthUI.TAG;
 
 public class DBAccessor {
     private boolean exists;
@@ -82,12 +80,11 @@ public class DBAccessor {
      * Checks if user with given email, password, and role exists in the database
      * @param email email
      * @param password password
-     * @param role user role (tutor or tutee)
+     * @param r user role ("Tutor" or "Tutee")
      * @return false if login failed. true if login successful (user exists)
      */
-    public boolean validateUser(String email, String password, String role){
-        final String pw = password;  // To look up in db
-        role = role.toLowerCase();  // role is passed as "Tutor" or "Tutee" which doesn't match db
+    public boolean validateUser(final String email, final String password, String r, final validateUserCommandWrapper wrapper){
+        final String role = r.toLowerCase();  // role is passed as "Tutor" or "Tutee" which doesn't match db
         Log.d("email", email);
         Log.d("password", password);
         Log.d("role", role);
@@ -99,9 +96,11 @@ public class DBAccessor {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            loggedin = false;
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("loginsuccess", document.getId() + " => " + document.getData());
-                                if( document.get("password").equals(pw) ) {
+                                Log.d("userexists", document.getId() + " => " + document.getData());
+                                if( document.get("password").equals(password) ) {
+                                    Log.d("passmatch", document.getId() + " => " + document.getData());
                                     loggedin = true;
                                     break;
                                 }
@@ -112,7 +111,7 @@ public class DBAccessor {
                         }
                     }
                 });
-        Log.d("userexists", Boolean.toString(loggedin));
+        Log.d("loggedin", Boolean.toString(loggedin));
         return loggedin;
     }
 
@@ -217,7 +216,7 @@ public class DBAccessor {
         profileMap.put("pic", u.getProfilePic());
 
         // if it's a tutor, add tutor-specific fields to map and update courses and availabilities
-        if(u.getType()=="tutor")
+        if(u.getType().equals("tutor"))
         {
             profileMap.put("numratings", u.getNumRatings());
             profileMap.put("rating", u.getRating());
@@ -260,7 +259,7 @@ public class DBAccessor {
 
                         // Appropriately create a Tutor or Tutee instance
                         User u;
-                        if(role=="tutor")
+                        if(role.equals("tutor"))
                         {
                             u = new Tutor(email);
                         }
@@ -280,7 +279,7 @@ public class DBAccessor {
                         u.setProfilePic(profilePic);
 
                         // If it's a tutor, add all Tutor-specific info
-                        if(role=="tutor")
+                        if(role.equals("tutor"))
                         {
                             long numRatings = (Long)document.get("numratings");
                             double rating = (Double)document.get("rating");
