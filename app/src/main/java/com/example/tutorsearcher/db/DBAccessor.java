@@ -151,8 +151,10 @@ public class DBAccessor {
         request.put("course", r.course);
         request.put("status", r.status);
         request.put("time", r.time);
-        request.put("tutor", r.tutor);
-        request.put("tutee", r.tutee);
+        request.put("tutorName", r.tutorName);
+        request.put("tuteeName", r.tuteeName);
+        request.put("tutorEmail", r.tutorEmail);
+        request.put("tuteeEmail", r.tuteeEmail);
 
         db.collection("requests")
                 .add(request)
@@ -187,7 +189,9 @@ public class DBAccessor {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 //                                Log.d(document.getId() + " => " + document.getData());
-                                Request r = new Request(String.valueOf(document.get("tutee")), String.valueOf(document.get("tutor")), String.valueOf(document.get("status")), String.valueOf(document.get("course")), String.valueOf(document.get("time")));
+                                Request r = new Request(String.valueOf(document.get("tuteeName")), String.valueOf(document.get("tutorName")),
+                                        String.valueOf(document.get("tuteeEmail")),String.valueOf(document.get("tutorEmail")),String.valueOf(document.get("status")),
+                                        String.valueOf(document.get("course")), String.valueOf(document.get("time")));
                                 rlist.add(r);
                             }
                         } else {
