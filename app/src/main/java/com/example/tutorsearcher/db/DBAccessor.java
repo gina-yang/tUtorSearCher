@@ -177,7 +177,7 @@ public class DBAccessor {
     public void getAllRequests(String email, String role, final getRequestsCommandWrapper wrapper){
         rlist = new ArrayList<Request>(); // ? A way to make it not final?
         CollectionReference reqRef = db.collection("requests");
-        reqRef.whereEqualTo(role, email)
+        reqRef.whereEqualTo(role+"Email", email)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

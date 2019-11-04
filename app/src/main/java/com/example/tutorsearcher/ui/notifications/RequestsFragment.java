@@ -45,15 +45,66 @@ public class RequestsFragment extends Fragment {
             //display all of the requests sent to the tutor
             //ArrayList<Request> requests =
             //mDBAccessor.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType());
-           // Log.d("reqeusts size", ""+requests.size());
-            float scale = getContext().getResources().getDisplayMetrics().density;//scale to convert to dp units
+           // Log.d("reqeusts size", ""+requests.size())
             //iterate through all the request and show their status
             //TODO this is just a test, we will use the lines above to get the requests in the real version
-            ArrayList<Request> requests = new ArrayList<Request>();
+            /*ArrayList<Request> requests = new ArrayList<Request>();
             requests.add(new Request("tuteeName", "tutorName","tuteeEmail",
                     "tutorEmail", "pending", "cs310", "mon 3-4pm"));
             requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
                     "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
+
+             */
+            getRequestsCommandWrapper tutorRequestsWrapper = new tutorRequestsWrapper();
+            mDBAccessor.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType(), tutorRequestsWrapper);
+
+        }
+        else//the user is a tutee
+        {
+            //display all of the requests they have made, only show the pending and accepted requests
+            //the wrapper will take care of the pulling requests
+            getRequestsCommandWrapper tuteeRequestsWrapper = new tuteeRequestsWrapper();
+            mDBAccessor.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType(), tuteeRequestsWrapper);
+            //ArrayList<Request> requests =
+            //mDBAccessor.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType());
+            // Log.d("reqeusts size", ""+requests.size());
+            //iterate through all the request and show their status
+            //TODO this is just a test, we will use the lines above to get the requests in the real version
+            /*ArrayList<Request> requests = new ArrayList<Request>();
+            requests.add(new Request("tuteeName", "tutorName","tuteeEmail",
+                    "tutorEmail", "pending", "cs310", "mon 3-4pm"));
+            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
+                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
+            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
+                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
+            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
+                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
+            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
+                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
+                "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
+            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
+                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
+            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
+                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
+            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
+                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
+            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
+                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
+
+             */
+        }
+        return root;
+    }
+
+    public class tutorRequestsWrapper extends getRequestsCommandWrapper
+    {
+        float scale = getContext().getResources().getDisplayMetrics().density;//scale to convert to dp units
+        public ArrayList<Request> results = new ArrayList<Request>();
+        // email_results is an ArrayList of all the matching emails that fit the search criteria
+        public void execute(ArrayList<Request> requests)
+        {
+            results = requests;
+            Log.d("fuck off", ""+results.size());
             for(Request request: requests)
 
             {
@@ -64,7 +115,7 @@ public class RequestsFragment extends Fragment {
                 requestInfo.setWidth((int) (213 * scale + 0.5f));
                 requestInfo.setHeight((int) (85 * scale + 0.5f));
                 //get all the info from the tutee request
-                requestInfo.setText(request.tuteeName + "\n"+request.course+" "+request.time+"\n"+request.tuteeEmail);
+                requestInfo.setText(request.tuteeName + "\n"+request.course+" "+request.time);
                 horizontalLayout.addView(requestInfo);
                 if(request.status.equals("pending"))
                 {//request is pending, so we want one button to accept, and another to reject
@@ -100,39 +151,18 @@ public class RequestsFragment extends Fragment {
                     requestsContainer.addView(horizontalLayout);
                 }
             }
+
         }
-        else//the user is a tutee
+    }
+    public class tuteeRequestsWrapper extends getRequestsCommandWrapper
+    {
+        float scale = getContext().getResources().getDisplayMetrics().density;//scale to convert to dp units
+        public ArrayList<Request> results = new ArrayList<Request>();
+        // email_results is an ArrayList of all the matching emails that fit the search criteria
+        public void execute(ArrayList<Request> requests)
         {
-            //display all of the requests they have made, only show the pending and accepted requests
-
-            //ArrayList<Request> requests =
-            //mDBAccessor.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType());
-            // Log.d("reqeusts size", ""+requests.size());
-            float scale = getContext().getResources().getDisplayMetrics().density;//scale to convert to dp units
-            //iterate through all the request and show their status
-            //TODO this is just a test, we will use the lines above to get the requests in the real version
-            ArrayList<Request> requests = new ArrayList<Request>();
-            requests.add(new Request("tuteeName", "tutorName","tuteeEmail",
-                    "tutorEmail", "pending", "cs310", "mon 3-4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-
-
+            results = requests;
+            Log.d("fuck off", ""+results.size());
             for(Request request: requests)
             {
                 LinearLayout horizontalLayout = new LinearLayout(getContext());//make view to hold image and text button
@@ -176,23 +206,6 @@ public class RequestsFragment extends Fragment {
                     requestsContainer.addView(horizontalLayout);
                 }
             }
-        }
-        return root;
-    }
-
-    public class requestsWrapper extends getRequestsCommandWrapper
-    {
-        public ArrayList<Request> results = new ArrayList<Request>();
-        // email_results is an ArrayList of all the matching emails that fit the search criteria
-        public void execute(ArrayList<Request> requests)
-        {
-            results = requests;
-            Log.d("fuck off", ""+results.size());
-            for(int i = 0; i < results.size(); i++)//iterate through all the results
-            {
-                Log.d("kara1","result is " + results.get(i));
-            }
-
         }
     }
 }
