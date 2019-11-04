@@ -33,6 +33,7 @@ import com.example.tutorsearcher.ui.login.LoginViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
+    public static boolean isTutor;
     private LoginViewModel loginViewModel;
     private LoginViewModel registerViewModel;
     DBAccessor mDBAccessor = new DBAccessor();//to access the data
@@ -179,7 +180,7 @@ public class LoginActivity extends AppCompatActivity {
                 */
                //TODO: authenticate login
                 //get the content of email field
-                
+
                openMainActivity();//after logging in go to the main acitivity page
             }
         });
