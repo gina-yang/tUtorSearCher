@@ -193,7 +193,6 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("doValidate status", Boolean.toString(success));
                         if( success ){
                             openMainActivity();
-                            Toast.makeText(getApplicationContext(), "Success! Logged in as " + usernameEditText.getText().toString(), Toast.LENGTH_LONG).show();
                         }
                         else {
                             showLoginFailed(-1);
@@ -237,6 +236,5 @@ public class LoginActivity extends AppCompatActivity {
 //        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
         Log.d("failedlogin", "failed");
         // What happens when user credentials are wrong?
-        Toast.makeText(getApplicationContext(), "Login failed! User not found.", Toast.LENGTH_LONG).show();
     }
 }
