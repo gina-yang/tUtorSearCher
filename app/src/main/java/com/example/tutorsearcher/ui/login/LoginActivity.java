@@ -39,10 +39,10 @@ import com.example.tutorsearcher.ui.login.LoginViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
-    //this user variable will hold all of the data for the user that logs in/resgisters
-    //set it once the user succesfully logs in
+    //this user variable will hold all of the data for the user that logs in/registers
+    //set it once the user successfully logs in
     //for now we will initialize it here as a tutor just for testing purposes
-    public static User loggedInUser = new Tutor("janeDoe@usc.edu");
+    public static User loggedInUser = new Tutor("karaleem@usc.edu");
     private LoginViewModel loginViewModel;
     private LoginViewModel registerViewModel;
     DBAccessor dba = new DBAccessor();//to access the data

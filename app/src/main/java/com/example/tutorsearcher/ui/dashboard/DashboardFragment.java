@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
@@ -26,13 +28,51 @@ public class DashboardFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
+
+        // Create items in view
         dashboardViewModel =
                 ViewModelProviders.of(this).get(DashboardViewModel.class);
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        final EditText nametext = root.findViewById(R.id.name_text);
+        final EditText agetext = root.findViewById(R.id.age_text);
+        final EditText gendertext = root.findViewById(R.id.gender_text);
+        Button button = root.findViewById(R.id.edit_profile_button);
 
-        // get profile, which loads info into loggedInUser and populates view fields
+        // Load profile data from DB
         User u = LoginActivity.loggedInUser;
-        new DBAccessor().getProfile(u.getEmail(), u.getType(), new LoadAndDisplayProfileWrapper(dashboardViewModel));
+        new DBAccessor().getProfile(u.getEmail(), u.getType(), new LoadAndDisplayProfileWrapper(root));
+
+        // make EditText fields non-editable by default
+        nametext.setEnabled(false);
+        agetext.setEnabled(false);
+        gendertext.setEnabled(false);
+        // add functionality for button to edit profile fields
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // toggle between "edit text" mode and "submit" mode
+                Button b = (Button) v;
+                if(b.getText().toString().equals("Edit Profile"))
+                {
+                    b.setText("Submit");
+                    nametext.setEnabled(true);
+                    agetext.setEnabled(true);
+                    gendertext.setEnabled(true);
+                }
+                else {
+                    b.setText("Edit Profile");
+                    nametext.setEnabled(false);
+                    agetext.setEnabled(false);
+                    gendertext.setEnabled(false);
+
+                    // SET USER PROFILE AND THEN UPDATE DB
+                    User u = LoginActivity.loggedInUser;
+                    u.setName(nametext.getText().toString());
+                    u.setAge(Long.parseLong(agetext.getText().toString()));
+                    u.setGender(gendertext.getText().toString());
+                    new DBAccessor().updateProfile(u);
+                }
+            }
+        });
 
 
         ImageView profileImageView = getActivity().findViewById(R.id.profile_picture);
@@ -65,11 +105,11 @@ public class DashboardFragment extends Fragment {
 
 class LoadAndDisplayProfileWrapper extends getProfileCommandWrapper
 {
-    private DashboardViewModel dashboardViewModel;
+    private View view;
 
-    public LoadAndDisplayProfileWrapper(DashboardViewModel dashboardViewModel_)
+    public LoadAndDisplayProfileWrapper(View view_)
     {
-        dashboardViewModel = dashboardViewModel_;
+        view = view_;
     }
 
     public void execute(User u)
@@ -78,6 +118,11 @@ class LoadAndDisplayProfileWrapper extends getProfileCommandWrapper
         LoginActivity.loggedInUser = u;
 
         // populate profile view fields
-        // TODO: USE DASHBOARD VIEW TO POPULATE FIELDS
+        EditText nametext = view.findViewById(R.id.name_text);
+        EditText agetext = view.findViewById(R.id.age_text);
+        EditText gendertext = view.findViewById(R.id.gender_text);
+        nametext.setText(u.getName());
+        agetext.setText(((Long)(u.getAge())).toString());
+        gendertext.setText(u.getGender());
     }
 }
