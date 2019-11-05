@@ -199,13 +199,64 @@ public class DBAccessor {
                 });
     }
 
+    /**
+     * Update request
+     * @param r request to be updated
+     */
+    public void updateRequest(final Request r)
+    {
+        // create new map and add new request status
+        final Map<String, Object> requestMap = new HashMap<>();
+        requestMap.put("status", r.status);
+
+        // connect to DB and overwrite this request
+        db.collection("requests")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            // go through all documents in the collection...
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String tuteeEmail = (String) document.get("tuteeEmail");
+                                String tutorEmail = (String) document.get("tutorEmail");
+                                String course = (String) document.get("course");
+                                String time = (String) document.get("time");
+                                // if this document has the correct tutor, tutee, course, and timeslot...
+                                if(tuteeEmail.equals(r.tuteeEmail) &&
+                                    tutorEmail.equals(r.tutorEmail) &&
+                                    course.equals(r.course) &&
+                                    time.equals(r.time) )
+                                {
+                                    //this request matches the search preferences
+                                    db.collection("requests").document(document.getId())
+                                            .update(requestMap)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d("ben", "updateRequest() executed successfully");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d("ben", "Error in updateRequest()");
+                                                }
+                                            });
+                                }
+                            }
+                        }
+                    }
+                });
+    }
+
     // Update user profile [works for both tutor and tutee using polymorphism] (Ben)
     // Takes in a User and updates all fields in Firebase
     /**
      * Update user profile [works for both tutor and tutee using polymorphism]
      * @param u user to be updated
      */
-    public void updateProfile(User u)
+    public void updateProfile(final User u)
     {
         // create new map and courses and availabilities
         Map<String, Object> profileMap = new HashMap<>();
@@ -231,13 +282,13 @@ public class DBAccessor {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        System.out.println("Profile overwritten with user email");
+                        Log.d("ben", "updateProfile() executed successfully on "+u.getEmail());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        System.out.println("Error adding document");
+                        Log.d("ben", "Error in updateProfile()");
                     }
                 });
     }
@@ -295,11 +346,11 @@ public class DBAccessor {
                     }
                     else
                     {
-                        Log.d("ben", "document not found: "+email);
+                        Log.d("ben", "getProfile(): document not found: "+email);
                         wrapper.execute(null); // if we get here, we didn't find a matching profile
                     }
                 } else {
-                    Log.d("ben", "getProfile task unsuccessful");
+                    Log.d("ben", "getProfile() task unsuccessful");
                     wrapper.execute(null); // if we get here, we didn't find a matching profile
                 }
             }
@@ -325,7 +376,6 @@ public class DBAccessor {
                         if (task.isSuccessful()) {
                             // go through all documents in the collection...
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Map<String, Object> docData = document.getData();
                                 ArrayList<String> courses = (ArrayList<String>) document.get("courses");;
                                 ArrayList<String> availability = (ArrayList<String>) document.get("availability");
                                 // if this document has the correct course and timeslot...

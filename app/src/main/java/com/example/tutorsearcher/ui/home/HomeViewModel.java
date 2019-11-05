@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.tutorsearcher.Request;
 import com.example.tutorsearcher.Tutee;
 import com.example.tutorsearcher.Tutor;
 import com.example.tutorsearcher.User;
@@ -26,6 +27,7 @@ public class HomeViewModel extends ViewModel {
         // TODO: DELETE
         // BenTest();
         // BenUpdateProfileTest();
+        // BenUpdateRequestTest();
     }
 
     public LiveData<String> getText() {
@@ -93,5 +95,17 @@ public class HomeViewModel extends ViewModel {
         t.setAvailability(availability);
         t.setCourses(courses);
         dba.updateProfile(t);
+    }
+
+    // TODO: DELETE
+    public void BenUpdateRequestTest()
+    {
+        DBAccessor dba = new DBAccessor();
+
+        // Test for Request
+        Request r = new Request("Bhargav Oza", "Neetu Khanna",
+                "oza@usc.edu", "khanna@usc.edu", "Accepted",
+                "CORE 104", "Tue 11");
+        dba.updateRequest(r);
     }
 }
