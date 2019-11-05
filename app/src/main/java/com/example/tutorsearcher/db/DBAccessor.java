@@ -122,7 +122,7 @@ public class DBAccessor {
         newUser.put("email", email);
         newUser.put("password", password);
 
-        db.collection(role).document(email)
+        db.collection(role.toLowerCase()+"s").document(email)
                 .set(newUser)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -141,6 +141,7 @@ public class DBAccessor {
     /**
      * Adds a tutee request to the database
      * @param email tutee's email
+     * @param r Request object
      */
     public void addRequest(String email, Request r){
         Map<String, Object> request = new HashMap<>();
