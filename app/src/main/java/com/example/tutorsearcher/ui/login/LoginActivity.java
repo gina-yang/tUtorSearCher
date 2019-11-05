@@ -208,11 +208,6 @@ public class LoginActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                class registerWrapper extends addNewUserCommandWrapper {
-//                    public void execute(){
-//
-//                    }
-//                }
                /* loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
