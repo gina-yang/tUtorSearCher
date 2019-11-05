@@ -32,6 +32,7 @@ import com.example.tutorsearcher.Tutor;
 import com.example.tutorsearcher.User;
 import com.example.tutorsearcher.activity.MainActivity;
 import com.example.tutorsearcher.db.DBAccessor;
+import com.example.tutorsearcher.db.getProfileCommandWrapper;
 import com.example.tutorsearcher.db.validateUserCommandWrapper;
 import com.example.tutorsearcher.ui.home.SearchFragment;
 import com.example.tutorsearcher.ui.login.LoginViewModel;
@@ -184,19 +185,26 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 class userExists extends validateUserCommandWrapper {
+                    class getUserObj extends getProfileCommandWrapper {
+                        public void execute(User u){
+                            LoginActivity.loggedInUser = u;
+                        }
+                    }
                     public void doValidate(boolean success) {
-                        Log.d("doValidate status", Boolean.toString(success));
                         if( success ){
                             openMainActivity();
                             Toast.makeText(getApplicationContext(), "Success! Logged in as " + usernameEditText.getText().toString(), Toast.LENGTH_LONG).show();
-                            //TODO create Tutee object that gets its data from the firebase
+                            dba.getProfile(usernameEditText.getText().toString(), loginSpinner.getSelectedItem().toString().toLowerCase(), new getUserObj());
+                            Log.d("lgemail", LoginActivity.loggedInUser.getEmail());
                         }
                         else {
                             showLoginFailed(-1);
                         }
+                        Log.d("doValidate status", Boolean.toString(success));
                     }
                 }
                 dba.validateUser(usernameEditText.getText().toString(), passwordEditText.getText().toString(), loginSpinner.getSelectedItem().toString(), new userExists());
+                Log.d("lgemail", LoginActivity.loggedInUser.getEmail());
             }
         });
 
