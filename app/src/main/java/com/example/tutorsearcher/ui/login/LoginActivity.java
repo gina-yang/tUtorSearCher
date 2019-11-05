@@ -248,7 +248,7 @@ public class LoginActivity extends AppCompatActivity {
                 //TODO: authenticate registration
                 checkIfUserExistsWrapper userExistsWrapper = new checkIfUserExistsWrapper();
                 dba.checkIfUserExists(usernameEditText.getText().toString(), loginSpinner.getSelectedItem().toString(), userExistsWrapper);//search for tutor with the given class and time
-                openMainActivity();//after logging in go to the main acitivity page
+                //openMainActivity();//after logging in go to the main acitivity page
             }
         });
     }

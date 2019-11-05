@@ -361,7 +361,7 @@ public class DBAccessor {
                         if(role.equals("tutor"))
                         {
                             long numRatings = (Long)document.get("numratings");
-                            double rating = (Double)document.get("rating");
+                            long rating = (long)document.get("rating");
                             ArrayList<String> courses = (ArrayList<String>)document.get("courses");
                             ArrayList<String> availability = (ArrayList<String>)document.get("availability");
                             u.setNumRatings(numRatings);
@@ -402,10 +402,15 @@ public class DBAccessor {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             // go through all documents in the collection...
+                            Log.d("course",course);
+                            Log.d("timeslot",timeslot);
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 ArrayList<String> courses = (ArrayList<String>) document.get("courses");;
                                 ArrayList<String> availability = (ArrayList<String>) document.get("availability");
                                 // if this document has the correct course and timeslot...
+                                Log.d("username 409",document.get("email").toString()+" end");
+                                Log.d("courses.contains",String.valueOf(courses.contains(course)));
+                                Log.d("availability.contains",String.valueOf(availability.contains(course)));
                                 if(courses.contains(course) && availability.contains(timeslot))
                                 {
                                     //this tutor matches the search preferences
