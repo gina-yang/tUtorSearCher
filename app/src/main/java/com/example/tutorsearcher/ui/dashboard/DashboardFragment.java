@@ -36,6 +36,8 @@ public class DashboardFragment extends Fragment {
         final EditText nametext = root.findViewById(R.id.name_text);
         final EditText agetext = root.findViewById(R.id.age_text);
         final EditText gendertext = root.findViewById(R.id.gender_text);
+        final TextView rating_text = root.findViewById(R.id.rating_text);
+        final TextView num_ratings_text = root.findViewById(R.id.num_ratings_text);
         Button button = root.findViewById(R.id.edit_profile_button);
 
         // Load profile data from DB
@@ -46,6 +48,14 @@ public class DashboardFragment extends Fragment {
         nametext.setEnabled(false);
         agetext.setEnabled(false);
         gendertext.setEnabled(false);
+
+        // hide fields if Tutee
+        if(u.getType().equals("tutee"))
+        {
+            rating_text.setVisibility(View.GONE);
+            num_ratings_text.setVisibility(View.GONE);
+        }
+
         // add functionality for button to edit profile fields
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -121,8 +131,16 @@ class LoadAndDisplayProfileWrapper extends getProfileCommandWrapper
         EditText nametext = view.findViewById(R.id.name_text);
         EditText agetext = view.findViewById(R.id.age_text);
         EditText gendertext = view.findViewById(R.id.gender_text);
+        TextView rating_text = view.findViewById(R.id.rating_text);
+        TextView num_ratings_text = view.findViewById(R.id.num_ratings_text);
         nametext.setText(u.getName());
         agetext.setText(((Long)(u.getAge())).toString());
         gendertext.setText(u.getGender());
+        if(u.getType().equals("tutor"))
+        {
+            Log.d("ben", "Rating: "+((Double)(u.getRating())).toString());
+            rating_text.setText("Rating: "+((Double)(u.getRating())).toString());
+            num_ratings_text.setText("Number of ratings: "+((Long)(u.getNumRatings())).toString());
+        }
     }
 }

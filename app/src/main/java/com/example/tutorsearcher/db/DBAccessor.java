@@ -213,7 +213,6 @@ public class DBAccessor {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-//                              Log.d(document.getId() + " => " + document.getData());
                                 Request r = new Request(String.valueOf(document.get("tuteeName")), String.valueOf(document.get("tutorName")),
                                         String.valueOf(document.get("tuteeEmail")),String.valueOf(document.get("tutorEmail")),String.valueOf(document.get("status")),
                                         String.valueOf(document.get("course")), String.valueOf(document.get("time")));
