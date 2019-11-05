@@ -112,6 +112,34 @@ public class DBAccessor {
     }
 
     /**
+     * This fucntion checks if the user given the email and type exists in the database
+     * @param email
+     * @param role_
+     * @param wrapper
+     */
+    public void checkIfUserExists(final String email, String role_, final validateUserCommandWrapper wrapper){
+        final String role = role_.toLowerCase();  // role is passed as "Tutor" or "Tutee" which doesn't match db
+        Log.d("email", email);
+        Log.d("role", role);
+
+        db.collection(role+"s")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            boolean lg = true;//the user with the emaila nd role exists in the database already, so account with those credentials cant be made
+                            wrapper.doValidate(lg);
+                        } else {
+                            Log.d("loginfailure", "Error getting documents: ", task.getException());
+                            wrapper.doValidate(false);
+                        }
+                    }
+                });
+    }
+
+    /**
      * Adds a new user to the database
      * @param email user email
      * @param password user password

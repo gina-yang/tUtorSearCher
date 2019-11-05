@@ -32,8 +32,8 @@ import com.example.tutorsearcher.Tutor;
 import com.example.tutorsearcher.User;
 import com.example.tutorsearcher.activity.MainActivity;
 import com.example.tutorsearcher.db.DBAccessor;
-import com.example.tutorsearcher.db.addNewUserCommandWrapper;
 import com.example.tutorsearcher.db.validateUserCommandWrapper;
+import com.example.tutorsearcher.ui.home.SearchFragment;
 import com.example.tutorsearcher.ui.login.LoginViewModel;
 import com.example.tutorsearcher.ui.login.LoginViewModelFactory;
 
@@ -183,16 +183,13 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /* loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-
-                */
                 class userExists extends validateUserCommandWrapper {
                     public void doValidate(boolean success) {
                         Log.d("doValidate status", Boolean.toString(success));
                         if( success ){
                             openMainActivity();
+                            Toast.makeText(getApplicationContext(), "Success! Logged in as " + usernameEditText.getText().toString(), Toast.LENGTH_LONG).show();
+                            //TODO create Tutee object that gets its data from the firebase
                         }
                         else {
                             showLoginFailed(-1);
@@ -207,18 +204,47 @@ public class LoginActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /**
+                 * this class is the wrapper that is used to check if a user given the email and role exists
+                 */
+                 class checkIfUserExistsWrapper extends validateUserCommandWrapper {
+                    public void doValidate(boolean exists)
+                    {
+                        Log.d("doValidate status", Boolean.toString(exists));
+                        if( !exists ){
+                            Toast.makeText(getApplicationContext(), "Invalid username. " + usernameEditText.getText().toString()+" has been taken.", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            //create user with the email given and password
+                            if(loginSpinner.getSelectedItem().toString().equals("Tutor"))//user want to create an account as a tutor
+                            {
+                                loggedInUser = new Tutor(usernameEditText.getText().toString());//create user with credentials
+                                //add new user to the database
+                                dba.addNewUser(usernameEditText.getText().toString(), passwordEditText.getText().toString(), loginSpinner.getSelectedItem().toString());
+                            }
+                            else//user wants to make an account as a tutee
+                            {
+                                loggedInUser = new Tutee(usernameEditText.getText().toString());//create user with credentials
+                                // new user to database
+                                dba.addNewUser(usernameEditText.getText().toString(), passwordEditText.getText().toString(), loginSpinner.getSelectedItem().toString());
+                            }
+                            openMainActivity();
+                        }
+                    }
+                }
                /* loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
 
                 */
-
                 //TODO: authenticate registration
-                dba.addNewUser(usernameEditText.getText().toString(), passwordEditText.getText().toString(), loginSpinner.getSelectedItem().toString());
+                checkIfUserExistsWrapper userExistsWrapper = new checkIfUserExistsWrapper();
+                dba.checkIfUserExists(usernameEditText.getText().toString(), loginSpinner.getSelectedItem().toString(), userExistsWrapper);//search for tutor with the given class and time
                 openMainActivity();//after logging in go to the main acitivity page
             }
         });
     }
+
 
     public void openMainActivity()
     {
@@ -236,5 +262,6 @@ public class LoginActivity extends AppCompatActivity {
 //        Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
         Log.d("failedlogin", "failed");
         // What happens when user credentials are wrong?
+        Toast.makeText(getApplicationContext(), "Login failed! User not found.", Toast.LENGTH_LONG).show();
     }
 }
