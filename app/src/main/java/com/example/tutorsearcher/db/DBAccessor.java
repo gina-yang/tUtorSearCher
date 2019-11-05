@@ -147,8 +147,18 @@ public class DBAccessor {
      */
     public void addNewUser(String email, String password, String role){
         Map<String, Object> newUser = new HashMap<>();
+        newUser.put("name", "Your Name");
         newUser.put("email", email);
+        newUser.put("gender", "NA");
         newUser.put("password", password);
+        newUser.put("age", -1);
+        newUser.put("pic", "example.com");
+
+        if (role.toLowerCase().equals("tutor")) {
+            newUser.put("numratings", 0);
+            newUser.put("rating", 0);
+        }
+
 
         db.collection(role.toLowerCase()+"s").document(email)
                 .set(newUser)
