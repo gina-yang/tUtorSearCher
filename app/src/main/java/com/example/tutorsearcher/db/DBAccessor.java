@@ -22,6 +22,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -122,6 +123,8 @@ public class DBAccessor {
         if (role.toLowerCase().equals("tutor")) {
             newUser.put("numratings", 0);
             newUser.put("rating", -1.5); // Needs to be a decimal value to prevent casting issues
+            newUser.put("courses", Arrays.asList("Add class names delimited by newlines", "ex. AMST100"));
+            newUser.put("availability", Arrays.asList("Add availability delimited by newlines", "ex. Mon 14 (Monday 2pm-3pm)"));
         }
 
 

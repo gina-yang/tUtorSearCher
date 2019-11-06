@@ -110,6 +110,7 @@ public class DashboardFragment extends Fragment {
                     String [] a = availability_text.getText().toString().split("\n");
                     ArrayList<String> alist = new ArrayList<String>(Arrays.asList(a));
                     u.setAvailability(alist);
+
                     dba.updateProfile(u);
                 }
             }
@@ -178,18 +179,21 @@ class LoadAndDisplayProfileWrapper extends getProfileCommandWrapper
 
             // Put courses in giant string
             StringBuilder coursesList = new StringBuilder();
-            for( String s : u.getCourses() ){
-                coursesList.append(s + "\n");
+            if( !u.getCourses().isEmpty() ){
+                for( String s : u.getCourses() ){
+                    coursesList.append(s + "\n");
+                }
+                courses_text.setText(coursesList.toString());
             }
-            courses_text.setText(coursesList.toString());
 
             // Put availability in giant string
             StringBuilder availList = new StringBuilder();
-            for( String s : u.getAvailability() ){
-                availList.append(s + "\n");
+            if( !u.getAvailability().isEmpty() && u.getAvailability() != null) {
+                for( String s : u.getAvailability() ){
+                    availList.append(s + "\n");
+                }
+                availability_text.setText(availList.toString());
             }
-            availability_text.setText(availList.toString());
-
         }
     }
 }
