@@ -1,5 +1,6 @@
 package com.example.tutorsearcher.ui.notifications;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -10,9 +11,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import com.example.tutorsearcher.R;
@@ -24,11 +28,14 @@ import com.example.tutorsearcher.db.searchCommandWrapper;
 import com.example.tutorsearcher.ui.login.LoginActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RequestsFragment extends Fragment {
 
     private RequestsViewModel requestsViewModel;
     private DBAccessor mDBAccessor = new DBAccessor();
+    //hashmap where key is a button on screen, and value is the request correlated to that button
+    HashMap<Button, Request> requestMap = new HashMap<Button, Request>();
     LinearLayout requestsContainer;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -105,7 +112,7 @@ public class RequestsFragment extends Fragment {
         {
             results = requests;
             Log.d("fuck off", ""+results.size());
-            for(Request request: requests)
+            for(final Request request: requests)
 
             {
                 //create view to add to the linear layout
@@ -120,17 +127,59 @@ public class RequestsFragment extends Fragment {
                 if(request.status.equals("pending"))
                 {//request is pending, so we want one button to accept, and another to reject
                     //create two buttons that either accepts or rejects the request
-                    Button acceptButton = new Button(getContext());//button to accept
+                    final Button acceptButton = new Button(getContext());//button to accept
                     acceptButton.setGravity(Gravity.RIGHT);
                     acceptButton.setWidth((int) (105 * scale + 0.5f));
                     acceptButton.setHeight((int) (60 * scale + 0.5f));
                     acceptButton.setText("Accept");
                     acceptButton.setTextSize(25);
+                    acceptButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            Log.d("click!","in onClick");
+                            //create a new request and send it
+                            Request request1 = requestMap.get(acceptButton);
+                            request1.status = "accepted";//accept the request
+                            //now add the request to the database
+                            mDBAccessor.updateRequest(request1);
+                            String requestMessage = "Accepted "+request1.tuteeName+"'s request for "+request1.course+" at "+request1.time+".";
+                            Toast toast = Toast.makeText(getContext(), requestMessage, Toast.LENGTH_LONG);
+                            toast.show();
+//                            Fragment currentFragment = getFragmentManager().findFragmentByTag("YourFragmentTag");
+//                            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//                            fragmentTransaction.detach(currentFragment);
+//                            fragmentTransaction.attach(currentFragment);
+//                            fragmentTransaction.commit();
+                        }
+                    });
+                    //add the button to the hashmap, and make its value the request this button is handling
+                    requestMap.put(acceptButton,request);
+
                     Button rejectButton = new Button(getContext());//button to reject
                     rejectButton.setGravity(Gravity.RIGHT);
                     rejectButton.setWidth((int) (105 * scale + 0.5f));
                     rejectButton.setHeight((int) (60 * scale + 0.5f));
                     rejectButton.setText("Reject");
+                    rejectButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            Log.d("click!","in onClick");
+                            //create a new request and send it
+                            Request request1 = requestMap.get(acceptButton);
+                            request1.status = "rejected";//accept the request
+                            //now add the request to the database
+                            mDBAccessor.updateRequest(request1);
+                            String requestMessage = "Rejected "+request1.tuteeName+"'s request for "+request1.course+" at "+request1.time+".";
+                            Toast toast = Toast.makeText(getContext(), requestMessage, Toast.LENGTH_LONG);
+                            toast.show();
+//                            //refresh page to update buttons
+//                            Fragment currentFragment = getFragmentManager().findFragmentByTag("YourFragmentTag");
+//                            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//                            fragmentTransaction.detach(currentFragment);
+//                            fragmentTransaction.attach(currentFragment);
+//                            fragmentTransaction.commit();
+                        }
+                    });
+                    //add the button to the hashmap, and make its value the request this button is handling
+                    requestMap.put(rejectButton,request);
 
                     //add the buttons to the horiz layout
                     horizontalLayout.addView(acceptButton);
@@ -145,7 +194,8 @@ public class RequestsFragment extends Fragment {
                     acceptedButton.setWidth((int) (105 * scale + 0.5f));
                     acceptedButton.setHeight((int) (60 * scale + 0.5f));
                     acceptedButton.setText("Accepted");
-
+                    //add the button to the hashmap, and make its value the request this button is handling
+                    requestMap.put(acceptedButton,request);
                     //add the buttons to the horiz layout
                     horizontalLayout.addView(acceptedButton);
                     requestsContainer.addView(horizontalLayout);
