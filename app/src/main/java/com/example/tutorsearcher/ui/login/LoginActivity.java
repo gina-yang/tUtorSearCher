@@ -40,14 +40,10 @@ import com.example.tutorsearcher.ui.login.LoginViewModel;
 import com.example.tutorsearcher.ui.login.LoginViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
-
-    //this user variable will hold all of the data for the user that logs in/registers
-    //set it once the user successfully logs in
-    //for now we will initialize it here as a tutor just for testing purposes
-    public static User loggedInUser;
+    public static User loggedInUser = new Tutor("oza@usc.edu");
     private LoginViewModel loginViewModel;
     private LoginViewModel registerViewModel;
-    DBAccessor dba = new DBAccessor();//to access the data
+    DBAccessor dba = new DBAccessor();
     Spinner loginSpinner;
 
     @Override
@@ -215,6 +211,7 @@ public class LoginActivity extends AppCompatActivity {
                 class emailExists extends isNewUserCommandWrapper {
                     class getUserObj extends getProfileCommandWrapper {
                         public void execute(User u){
+
                             LoginActivity.loggedInUser = u;
                         }
                     }
