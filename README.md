@@ -7,3 +7,6 @@ students seeking help in their classes.
 2. Unzip the zip file.
 3. In Android Studio select *File > New > Import Project...*
 4. Select the unzipped directory.
+5. Continue through the steps to import the project.
+6. Choose Pixel 2 XL API 23 as the device for the emulator.
+7. Run the app.
