@@ -39,40 +39,33 @@ public class DBAccessor {
         db = FirebaseFirestore.getInstance();
     }
 
-//    /**
-//     * Checks if user is new by looking in database
-//     * @param email email to check
-//     * @param role role to check
-//     * @return boolean true if user is new
-//     */
-//    public boolean isNewUser(String email, String role){
-//        CollectionReference roleColl = null;
-//        if( role.equals("tutor")){
-//            roleColl = db.collection("tutors");
-//        }
-//        else if( role.equals("tutee")){
-//            roleColl = db.collection("tutees");
-//        }
-//        exists = false;
-//        Query query = roleColl.whereEqualTo("email", email);
-//
-//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    for (QueryDocumentSnapshot document : task.getResult()) {
-//                        if( document.exists() ){
-//                            exists = true;
-//                            Log.d("success","User exists!");
-//                        }
-//                    }
-//                } else {
-//                    Log.d("failure","User doesn't exist");
-//                }
-//            }
-//        });
-//        return exists;
-//    }
+    /**
+     * Checks if user is new by looking in database
+     * @param email email to check
+     * @param role role to check
+     * @param wrapper wrapper for this function
+     */
+    public void isNewUser(String email, String role, final isNewUserCommandWrapper wrapper){
+        DocumentReference docRef = db.collection(role+"s").document(email);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("isNew", "DocumentSnapshot data: " + document.getData());
+                        wrapper.execute(false);
+                    } else {
+                        Log.d("isNew", "No such document");
+                        wrapper.execute(true);
+                    }
+                } else {
+                    Log.d("isNew", "get failed with ", task.getException());
+                    wrapper.execute(true);
+                }
+            }
+        });
+    }
 
     /**
      * Checks if user with given email, password, and role exists in the database
