@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     //this user variable will hold all of the data for the user that logs in/registers
     //set it once the user successfully logs in
     //for now we will initialize it here as a tutor just for testing purposes
-    public static User loggedInUser = new Tutee("oza@usc.edu");
+    public static User loggedInUser;
     private LoginViewModel loginViewModel;
     private LoginViewModel registerViewModel;
     DBAccessor dba = new DBAccessor();//to access the data
@@ -205,7 +205,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
                 dba.validateUser(usernameEditText.getText().toString(), passwordEditText.getText().toString(), loginSpinner.getSelectedItem().toString(), new userExists());
-                Log.d("lgemail", LoginActivity.loggedInUser.getEmail());
             }
         });
 
@@ -214,9 +213,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 class emailExists extends isNewUserCommandWrapper {
+                    class getUserObj extends getProfileCommandWrapper {
+                        public void execute(User u){
+                            LoginActivity.loggedInUser = u;
+                        }
+                    }
                     public void execute(boolean isNew){
                         if( isNew ){
                             dba.addNewUser(usernameEditText.getText().toString(), passwordEditText.getText().toString(), loginSpinner.getSelectedItem().toString());
+                            dba.getProfile(usernameEditText.getText().toString(), loginSpinner.getSelectedItem().toString().toLowerCase(), new getUserObj());
                             Toast.makeText(getApplicationContext(), "Success! Logged in as " + usernameEditText.getText().toString(), Toast.LENGTH_LONG).show();
                             openMainActivity();
                         }

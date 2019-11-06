@@ -46,22 +46,22 @@ public class HomeViewModel extends ViewModel {
         }
     }*/
 
-    public class printProfileNameWrapper extends getProfileCommandWrapper
-    {
-        public void execute(User u)
-        {
-            Log.d("ben", "User name: "+u.getName());
-        }
-    }
+//    public class printProfileNameWrapper extends getProfileCommandWrapper
+//    {
+//        public void execute(User u)
+//        {
+//            Log.d("ben", "User name: "+u.getName());
+//        }
+//    }
 
     // You can define different wrapper functions, as long as they extend the base wrapper for the func
-    public class printProfileGenderWrapper extends getProfileCommandWrapper
-    {
-        public void execute(User u)
-        {
-            Log.d("ben", "Gender: "+u.getGender());
-        }
-    }
+//    public class printProfileGenderWrapper extends getProfileCommandWrapper
+//    {
+//        public void execute(User u)
+//        {
+//            Log.d("ben", "Gender: "+u.getGender());
+//        }
+//    }
 
     // TODO: DELETE
     public void BenTest()
@@ -74,38 +74,38 @@ public class HomeViewModel extends ViewModel {
     }
 
     // TODO: DELETE
-    public void BenUpdateProfileTest()
-    {
-        DBAccessor dba = new DBAccessor();
-
-        // Test for Tutee (oza@usc.edu)
-        User u = new Tutee("oza@usc.edu");
-        u.setName("Bhargav Oza");
-        dba.updateProfile(u);
-
-        // Test for Tutor (khanna@usc.edu)
-        User t = new Tutor("khanna@usc.edu");
-        t.setName("Keetu Nhanna");
-        ArrayList<String> availability = new ArrayList<String>();
-        availability.add("Tue 11");
-        availability.add("Wed 18");
-        ArrayList<String> courses = new ArrayList<String>();
-        courses.add("CORE 104");
-        courses.add("LANG 220");
-        t.setAvailability(availability);
-        t.setCourses(courses);
-        dba.updateProfile(t);
-    }
+//    public void BenUpdateProfileTest()
+//    {
+//        DBAccessor dba = new DBAccessor();
+//
+//        // Test for Tutee (oza@usc.edu)
+//        User u = new Tutee("oza@usc.edu");
+//        u.setName("Bhargav Oza");
+//        dba.updateProfile(u);
+//
+//        // Test for Tutor (khanna@usc.edu)
+//        User t = new Tutor("khanna@usc.edu");
+//        t.setName("Keetu Nhanna");
+//        ArrayList<String> availability = new ArrayList<String>();
+//        availability.add("Tue 11");
+//        availability.add("Wed 18");
+//        ArrayList<String> courses = new ArrayList<String>();
+//        courses.add("CORE 104");
+//        courses.add("LANG 220");
+//        t.setAvailability(availability);
+//        t.setCourses(courses);
+//        dba.updateProfile(t);
+//    }
 
     // TODO: DELETE
-    public void BenUpdateRequestTest()
-    {
-        DBAccessor dba = new DBAccessor();
-
-        // Test for Request
-        Request r = new Request("Bhargav Oza", "Neetu Khanna",
-                "oza@usc.edu", "khanna@usc.edu", "Accepted",
-                "CORE 104", "Tue 11");
-        dba.updateRequest(r);
-    }
+//    public void BenUpdateRequestTest()
+//    {
+//        DBAccessor dba = new DBAccessor();
+//
+//        // Test for Request
+//        Request r = new Request("Bhargav Oza", "Neetu Khanna",
+//                "oza@usc.edu", "khanna@usc.edu", "Accepted",
+//                "CORE 104", "Tue 11");
+//        dba.updateRequest(r);
+//    }
 }

@@ -105,34 +105,6 @@ public class DBAccessor {
     }
 
     /**
-     * This fucntion checks if the user given the email and type exists in the database
-     * @param email
-     * @param role_
-     * @param wrapper
-     */
-    public void checkIfUserExists(final String email, String role_, final validateUserCommandWrapper wrapper){
-        final String role = role_.toLowerCase();  // role is passed as "Tutor" or "Tutee" which doesn't match db
-        Log.d("email", email);
-        Log.d("role", role);
-
-        db.collection(role+"s")
-                .whereEqualTo("email", email)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            boolean lg = true;//the user with the emaila nd role exists in the database already, so account with those credentials cant be made
-                            wrapper.doValidate(lg);
-                        } else {
-                            Log.d("loginfailure", "Error getting documents: ", task.getException());
-                            wrapper.doValidate(false);
-                        }
-                    }
-                });
-    }
-
-    /**
      * Adds a new user to the database
      * @param email user email
      * @param password user password
@@ -149,7 +121,7 @@ public class DBAccessor {
 
         if (role.toLowerCase().equals("tutor")) {
             newUser.put("numratings", 0);
-            newUser.put("rating", 0);
+            newUser.put("rating", -1.5); // Needs to be a decimal value to prevent casting issues
         }
 
 
@@ -364,7 +336,7 @@ public class DBAccessor {
                         if(role.equals("tutor"))
                         {
                             long numRatings = (Long)document.get("numratings");
-                            long rating = (long)document.get("rating");
+                            double rating = (double)document.get("rating");
                             ArrayList<String> courses = (ArrayList<String>)document.get("courses");
                             ArrayList<String> availability = (ArrayList<String>)document.get("availability");
                             u.setNumRatings(numRatings);

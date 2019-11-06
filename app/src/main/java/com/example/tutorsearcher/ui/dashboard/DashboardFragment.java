@@ -25,9 +25,9 @@ import com.squareup.picasso.Picasso;
 public class DashboardFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
+    private DBAccessor dba = new DBAccessor();
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-            ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         // Create items in view
         dashboardViewModel =
@@ -38,22 +38,37 @@ public class DashboardFragment extends Fragment {
         final EditText gendertext = root.findViewById(R.id.gender_text);
         final TextView rating_text = root.findViewById(R.id.rating_text);
         final TextView num_ratings_text = root.findViewById(R.id.num_ratings_text);
+        final EditText courses_text = root.findViewById(R.id.courses_text);
+        final EditText availability_text = root.findViewById(R.id.availability_text);
+
+        final TextView ratings_label = root.findViewById(R.id.textView3);
+        final TextView num_ratings_label = root.findViewById(R.id.textView4);
+        final TextView courses_label = root.findViewById(R.id.textView5);
+        final TextView availability_label = root.findViewById(R.id.textView6);
         Button button = root.findViewById(R.id.edit_profile_button);
 
         // Load profile data from DB
         User u = LoginActivity.loggedInUser;
-        new DBAccessor().getProfile(u.getEmail(), u.getType(), new LoadAndDisplayProfileWrapper(root));
+        dba.getProfile(u.getEmail(), u.getType(), new LoadAndDisplayProfileWrapper(root));
 
         // make EditText fields non-editable by default
         nametext.setEnabled(false);
         agetext.setEnabled(false);
         gendertext.setEnabled(false);
+        courses_text.setEnabled(false);
+        availability_text.setEnabled(false);
 
-        // hide fields if Tutee
+        // hide fields and labels if Tutee
         if(u.getType().equals("tutee"))
         {
-            rating_text.setVisibility(View.GONE);
-            num_ratings_text.setVisibility(View.GONE);
+            rating_text.setVisibility(View.INVISIBLE);
+            num_ratings_text.setVisibility(View.INVISIBLE);
+            ratings_label.setVisibility(View.INVISIBLE);
+            num_ratings_label.setVisibility(View.INVISIBLE);
+            courses_text.setVisibility(View.INVISIBLE);
+            courses_label.setVisibility(View.INVISIBLE);
+            availability_text.setVisibility(View.INVISIBLE);
+            availability_label.setVisibility(View.INVISIBLE);
         }
 
         // add functionality for button to edit profile fields
@@ -67,19 +82,23 @@ public class DashboardFragment extends Fragment {
                     nametext.setEnabled(true);
                     agetext.setEnabled(true);
                     gendertext.setEnabled(true);
+                    courses_text.setEnabled(true);
+                    availability_text.setEnabled(true);
                 }
                 else {
                     b.setText("Edit Profile");
                     nametext.setEnabled(false);
                     agetext.setEnabled(false);
                     gendertext.setEnabled(false);
+                    courses_text.setEnabled(false);
+                    availability_text.setEnabled(false);
 
                     // SET USER PROFILE AND THEN UPDATE DB
                     User u = LoginActivity.loggedInUser;
                     u.setName(nametext.getText().toString());
                     u.setAge(Long.parseLong(agetext.getText().toString()));
                     u.setGender(gendertext.getText().toString());
-                    new DBAccessor().updateProfile(u);
+                    dba.updateProfile(u);
                 }
             }
         });
@@ -139,8 +158,8 @@ class LoadAndDisplayProfileWrapper extends getProfileCommandWrapper
         if(u.getType().equals("tutor"))
         {
             Log.d("ben", "Rating: "+((Double)(u.getRating())).toString());
-            rating_text.setText("Rating: "+((Double)(u.getRating())).toString());
-            num_ratings_text.setText("Number of ratings: "+((Long)(u.getNumRatings())).toString());
+            rating_text.setText(((Double)(u.getRating())).toString());
+            num_ratings_text.setText(((Long)(u.getNumRatings())).toString());
         }
     }
 }
