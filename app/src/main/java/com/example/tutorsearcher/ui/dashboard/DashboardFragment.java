@@ -22,6 +22,9 @@ import com.example.tutorsearcher.db.getProfileCommandWrapper;
 import com.example.tutorsearcher.ui.login.LoginActivity;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class DashboardFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
@@ -98,6 +101,15 @@ public class DashboardFragment extends Fragment {
                     u.setName(nametext.getText().toString());
                     u.setAge(Long.parseLong(agetext.getText().toString()));
                     u.setGender(gendertext.getText().toString());
+
+                    // Set courses and availability
+                    String [] c = courses_text.getText().toString().split("\n");
+                    ArrayList<String> clist = new ArrayList<String>(Arrays.asList(c));
+                    u.setCourses(clist);
+
+                    String [] a = availability_text.getText().toString().split("\n");
+                    ArrayList<String> alist = new ArrayList<String>(Arrays.asList(a));
+                    u.setAvailability(alist);
                     dba.updateProfile(u);
                 }
             }
@@ -150,6 +162,9 @@ class LoadAndDisplayProfileWrapper extends getProfileCommandWrapper
         EditText nametext = view.findViewById(R.id.name_text);
         EditText agetext = view.findViewById(R.id.age_text);
         EditText gendertext = view.findViewById(R.id.gender_text);
+        EditText courses_text = view.findViewById(R.id.courses_text);
+        EditText availability_text = view.findViewById(R.id.availability_text);
+
         TextView rating_text = view.findViewById(R.id.rating_text);
         TextView num_ratings_text = view.findViewById(R.id.num_ratings_text);
         nametext.setText(u.getName());
@@ -160,6 +175,21 @@ class LoadAndDisplayProfileWrapper extends getProfileCommandWrapper
             Log.d("ben", "Rating: "+((Double)(u.getRating())).toString());
             rating_text.setText(((Double)(u.getRating())).toString());
             num_ratings_text.setText(((Long)(u.getNumRatings())).toString());
+
+            // Put courses in giant string
+            StringBuilder coursesList = new StringBuilder();
+            for( String s : u.getCourses() ){
+                coursesList.append(s + "\n");
+            }
+            courses_text.setText(coursesList.toString());
+
+            // Put availability in giant string
+            StringBuilder availList = new StringBuilder();
+            for( String s : u.getAvailability() ){
+                availList.append(s + "\n");
+            }
+            availability_text.setText(availList.toString());
+
         }
     }
 }
