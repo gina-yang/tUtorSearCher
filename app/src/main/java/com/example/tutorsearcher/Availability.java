@@ -1,3 +1,5 @@
+// BMa: DEPRECATED
+
 package com.example.tutorsearcher;
 
 public class Availability {
