@@ -383,9 +383,12 @@ public class DBAccessor {
                             Log.d("course",course);
                             Log.d("timeslot",timeslot);
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                ArrayList<String> courses = (ArrayList<String>) document.get("courses");;
-                                ArrayList<String> availability = (ArrayList<String>) document.get("availability");
+                                ArrayList<String> courses = new ArrayList<String>();
+                                courses = (ArrayList<String>) document.get("courses");;
+                                ArrayList<String> availability = new ArrayList<String>();
+                                availability = (ArrayList<String>)document.get("availability");
                                 // if this document has the correct course and timeslot...
+                                Log.d("is course null???",String.valueOf(course));
                                 Log.d("username 409",document.get("email").toString()+" end");
                                 Log.d("courses.contains",String.valueOf(courses.contains(course)));
                                 Log.d("availability.contains",String.valueOf(availability.contains(course)));
