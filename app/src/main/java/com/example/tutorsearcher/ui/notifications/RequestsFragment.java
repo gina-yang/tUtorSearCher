@@ -212,7 +212,7 @@ public class RequestsFragment extends Fragment {
         public void execute(ArrayList<Request> requests)
         {
             results = requests;
-            Log.d("fuck off", ""+results.size());
+            Log.d("kara", ""+results.size());
             for(Request request: requests)
             {
                 LinearLayout horizontalLayout = new LinearLayout(getContext());//make view to hold image and text button
@@ -224,7 +224,7 @@ public class RequestsFragment extends Fragment {
                 requestInfo.setText(request.tutorName + "\n"+request.course+" "+request.time);
                 requestInfo.setTextSize(20);
                 horizontalLayout.addView(requestInfo);
-                if(request.status.equals("pending"))
+                if(request.status.toLowerCase().equals("pending"))
                 {//request is pending, so the user cannot see the tutor's email
                     Button pendingButton = new Button(getContext());//button to accept
                     pendingButton.setGravity(Gravity.RIGHT);
@@ -236,7 +236,7 @@ public class RequestsFragment extends Fragment {
                     horizontalLayout.addView(pendingButton);
                     requestsContainer.addView(horizontalLayout);
                 }
-                else if(request.status.equals("accepted"))
+                else if(request.status.toLowerCase().equals("accepted"))
                 {//request has been accepted, so user can view the tutor's email
                     Button acceptedButton = new Button(getContext());//button to accept
                     acceptedButton.setGravity(Gravity.RIGHT);
