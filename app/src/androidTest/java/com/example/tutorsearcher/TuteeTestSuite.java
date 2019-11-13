@@ -40,15 +40,14 @@ public class TuteeTestSuite {
     }
 
     @Test
-    public void testThatShouldPass() {
-        onView(withId(R.id.username))
-                .perform(typeText(stringToBetyped), closeSoftKeyboard());
-        // onView(withId(R.id.changeTextBt)).perform(click());
+    public void noRequestsView() {
+    }
 
-        // Check that the text was changed.
-        onView(withId(R.id.username))
-                .check(matches(withText(stringToBetyped)));
+    @Test
+    public void oneRequestView() {
+    }
 
-        Log.d("test", "The Espresso Pass test has run!");
+    @Test
+    public void twoRequestsView() {
     }
 }

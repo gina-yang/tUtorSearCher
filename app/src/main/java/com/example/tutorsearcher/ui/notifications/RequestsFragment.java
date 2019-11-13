@@ -111,7 +111,7 @@ public class RequestsFragment extends Fragment {
         public void execute(ArrayList<Request> requests)
         {
             results = requests;
-            Log.d("fuck off", ""+results.size());
+            Log.d("kara", ""+results.size());
             for(final Request request: requests)
 
             {
