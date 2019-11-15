@@ -47,6 +47,7 @@ public class RequestsFragment extends Fragment {
         //add any requests here
         //first check if user logged in is a tutor or tutee
         Log.d("logged in user type: ",LoginActivity.loggedInUser.getType());
+        Log.d("ben", "requests on create View!");
         if(LoginActivity.loggedInUser.getType().equals("tutor"))
         {//the user is a tutor
             //display all of the requests sent to the tutor
@@ -63,6 +64,7 @@ public class RequestsFragment extends Fragment {
 
              */
             getRequestsCommandWrapper tutorRequestsWrapper = new tutorRequestsWrapper();
+            Log.d("ben", "getting all requests from email "+LoginActivity.loggedInUser.getEmail()+" and type "+LoginActivity.loggedInUser.getType());
             mDBAccessor.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType(), tutorRequestsWrapper);
 
         }
@@ -71,6 +73,7 @@ public class RequestsFragment extends Fragment {
             //display all of the requests they have made, only show the pending and accepted requests
             //the wrapper will take care of the pulling requests
             getRequestsCommandWrapper tuteeRequestsWrapper = new tuteeRequestsWrapper();
+            Log.d("ben", "getting all requests from email "+LoginActivity.loggedInUser.getEmail()+" and type "+LoginActivity.loggedInUser.getType());
             mDBAccessor.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType(), tuteeRequestsWrapper);
             //ArrayList<Request> requests =
             //mDBAccessor.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType());
