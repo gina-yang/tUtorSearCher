@@ -182,6 +182,7 @@ public class DBAccessor {
      * @param wrapper a getRequestsCommandWrapper class containing instructions to execute on load
      */
     public void getAllRequests(String email, String role, final getRequestsCommandWrapper wrapper){
+        Log.d("ben", "collecting all requests for email "+email+ " and role "+role);
         rlist = new ArrayList<Request>(); // ? A way to make it not final?
         CollectionReference reqRef = db.collection("requests");
         reqRef.whereEqualTo(role+"Email", email)
@@ -195,7 +196,9 @@ public class DBAccessor {
                                         String.valueOf(document.get("tuteeEmail")),String.valueOf(document.get("tutorEmail")),String.valueOf(document.get("status")),
                                         String.valueOf(document.get("course")), String.valueOf(document.get("time")));
                                 rlist.add(r);
+                                Log.d("ben", "getAllRequests(): added tutor result "+r.tutorEmail);
                             }
+                            Log.d("ben", "getAllRequests(): retrieved "+rlist.size()+" results");
                             wrapper.execute(rlist);
                         } else {
                             Log.d("failure", "Error getting documents: ");

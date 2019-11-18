@@ -47,6 +47,7 @@ public class RequestsFragment extends Fragment {
         //add any requests here
         //first check if user logged in is a tutor or tutee
         Log.d("logged in user type: ",LoginActivity.loggedInUser.getType());
+        Log.d("ben", "requests on create View!");
         if(LoginActivity.loggedInUser.getType().equals("tutor"))
         {//the user is a tutor
             //display all of the requests sent to the tutor
@@ -63,6 +64,7 @@ public class RequestsFragment extends Fragment {
 
              */
             getRequestsCommandWrapper tutorRequestsWrapper = new tutorRequestsWrapper();
+            Log.d("ben", "getting all requests from email "+LoginActivity.loggedInUser.getEmail()+" and type "+LoginActivity.loggedInUser.getType());
             mDBAccessor.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType(), tutorRequestsWrapper);
 
         }
@@ -71,6 +73,7 @@ public class RequestsFragment extends Fragment {
             //display all of the requests they have made, only show the pending and accepted requests
             //the wrapper will take care of the pulling requests
             getRequestsCommandWrapper tuteeRequestsWrapper = new tuteeRequestsWrapper();
+            Log.d("ben", "getting all requests from email "+LoginActivity.loggedInUser.getEmail()+" and type "+LoginActivity.loggedInUser.getType());
             mDBAccessor.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType(), tuteeRequestsWrapper);
             //ArrayList<Request> requests =
             //mDBAccessor.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType());
@@ -111,7 +114,7 @@ public class RequestsFragment extends Fragment {
         public void execute(ArrayList<Request> requests)
         {
             results = requests;
-            Log.d("fuck off", ""+results.size());
+            Log.d("kara", ""+results.size());
             for(final Request request: requests)
 
             {
@@ -212,7 +215,7 @@ public class RequestsFragment extends Fragment {
         public void execute(ArrayList<Request> requests)
         {
             results = requests;
-            Log.d("fuck off", ""+results.size());
+            Log.d("kara", ""+results.size());
             for(Request request: requests)
             {
                 LinearLayout horizontalLayout = new LinearLayout(getContext());//make view to hold image and text button
@@ -224,7 +227,7 @@ public class RequestsFragment extends Fragment {
                 requestInfo.setText(request.tutorName + "\n"+request.course+" "+request.time);
                 requestInfo.setTextSize(20);
                 horizontalLayout.addView(requestInfo);
-                if(request.status.equals("pending"))
+                if(request.status.toLowerCase().equals("pending"))
                 {//request is pending, so the user cannot see the tutor's email
                     Button pendingButton = new Button(getContext());//button to accept
                     pendingButton.setGravity(Gravity.RIGHT);
@@ -236,7 +239,7 @@ public class RequestsFragment extends Fragment {
                     horizontalLayout.addView(pendingButton);
                     requestsContainer.addView(horizontalLayout);
                 }
-                else if(request.status.equals("accepted"))
+                else if(request.status.toLowerCase().equals("accepted"))
                 {//request has been accepted, so user can view the tutor's email
                     Button acceptedButton = new Button(getContext());//button to accept
                     acceptedButton.setGravity(Gravity.RIGHT);
