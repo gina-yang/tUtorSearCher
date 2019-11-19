@@ -82,7 +82,7 @@ public class SearchFragment extends Fragment{
                 String className = textView.getText().toString();//class user is searching for
                 String day = daySpinner.getSelectedItem().toString();//day user is searching for
                 String time =timeSpinner.getSelectedItem().toString();//time user is searching for
-                String dayTimeStr = day + time;
+                String dayTimeStr = day + " " + time;
                 //TODO: use search prefs to search thru firebase to find any relavent times
                 DBAccessor dba = new DBAccessor();
                 searchResultWrapper resultWrapper = new searchResultWrapper();
@@ -158,7 +158,7 @@ public class SearchFragment extends Fragment{
                         String tuteeEmail = LoginActivity.loggedInUser.getEmail();
                         String tutorEmail = tutor.getEmail();
                         String course = textView.getText().toString();
-                        String time = daySpinner.getSelectedItem().toString() + timeSpinner.getSelectedItem().toString();
+                        String time = daySpinner.getSelectedItem().toString() + " " + timeSpinner.getSelectedItem().toString();
                         Request request = new Request(tuteeName,tutorName,tuteeEmail,tutorEmail,"pending",course,time);
                         //now add the request to the database
                         mDBAccessor.addRequest(LoginActivity.loggedInUser.getEmail(),request);
