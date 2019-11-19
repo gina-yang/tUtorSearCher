@@ -119,7 +119,7 @@ public class SearchFragment extends Fragment{
         public void execute2(ArrayList<User> user_results)
         {
             results = user_results;
-            Log.d("fuck off", ""+user_results.size());
+            Log.d("kara1", ""+user_results.size());
             for(int i = 0; i < results.size(); i++)//iterate through all the results
             {
                 Log.d("kara1","result is " + results.get(i));
