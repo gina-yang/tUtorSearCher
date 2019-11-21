@@ -21,7 +21,6 @@ allprojects {
         
     }
 }
-apply plugin: 'com.google.gms.google-services'
 
 task clean(type: Delete) {
     delete rootProject.buildDir

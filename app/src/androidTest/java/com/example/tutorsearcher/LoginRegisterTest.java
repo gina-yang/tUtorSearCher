@@ -9,6 +9,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
+
+import static org.mockito.Mockito.*;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
