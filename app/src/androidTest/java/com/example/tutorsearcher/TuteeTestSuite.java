@@ -7,7 +7,14 @@ package com.example.tutorsearcher;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,6 +39,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.example.tutorsearcher.SearchTestSuite.hasChildren;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
@@ -100,6 +109,10 @@ public class TuteeTestSuite {
         onView(withId(R.id.requestsContainer)).check(matches(
                 hasChildren(is(targetNumResults))
         ));
+
+        // Verify that the tutor's name is correct
+        onView(nthChildOf(nthChildOf(withId(R.id.requestsContainer),
+                0), 0)).check(matches(withText(containsString("Kara Mota"))));
     }
 
     @Test
@@ -124,6 +137,10 @@ public class TuteeTestSuite {
         onView(withId(R.id.requestsContainer)).check(matches(
                 hasChildren(is(targetNumResults))
         ));
+
+        // Verify that the tutor's name is correct
+        onView(nthChildOf(nthChildOf(withId(R.id.requestsContainer),
+                0), 0)).check(matches(withText(containsString("Keetu Nhanna"))));
     }
 
     @Test
@@ -148,6 +165,12 @@ public class TuteeTestSuite {
         onView(withId(R.id.requestsContainer)).check(matches(
                 hasChildren(is(targetNumResults))
         ));
+
+        // Verify that the tutor's name is correct in both cases
+        onView(nthChildOf(nthChildOf(withId(R.id.requestsContainer),
+                0), 0)).check(matches(withText(containsString("Keetu Nhanna"))));
+        onView(nthChildOf(nthChildOf(withId(R.id.requestsContainer),
+                1), 0)).check(matches(withText(containsString("Keetu Nhanna"))));
     }
 
     // Adapted from: https://stackoverflow.com/questions/20860832/why-does-getactivity-block-during-junit-test-when-custom-imageview-calls-start
@@ -159,5 +182,25 @@ public class TuteeTestSuite {
         getInstrumentation().getTargetContext().startActivity(intent);
         MainActivity mActivity = (MainActivity) getInstrumentation().waitForMonitor(monitor);
         return mActivity;
+    }
+
+    // adapted from: https://stackoverflow.com/questions/24748303/selecting-child-view-at-index-using-espresso
+    public static Matcher<View> nthChildOf(final Matcher<View> parentMatcher, final int childPosition) {
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with "+childPosition+" child view of type parentMatcher");
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                if (!(view.getParent() instanceof ViewGroup)) {
+                    return parentMatcher.matches(view.getParent());
+                }
+
+                ViewGroup group = (ViewGroup) view.getParent();
+                return parentMatcher.matches(view.getParent()) && group.getChildAt(childPosition).equals(view);
+            }
+        };
     }
 }

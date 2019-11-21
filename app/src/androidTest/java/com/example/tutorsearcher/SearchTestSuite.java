@@ -27,6 +27,8 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.example.tutorsearcher.TuteeTestSuite.nthChildOf;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.AllOf.allOf;
@@ -162,6 +164,10 @@ public class SearchTestSuite {
         onView(withId(R.id.searchResultsContainer)).check(matches(
                 hasChildren(is(targetNumResults))
         ));
+
+        // Verify that it's the correct result
+        onView(nthChildOf(nthChildOf(withId(R.id.searchResultsContainer),
+                0), 0)).check(matches(withText(containsString("Kara Mota"))));
     }
 
     @Test
@@ -189,6 +195,12 @@ public class SearchTestSuite {
         onView(withId(R.id.searchResultsContainer)).check(matches(
                 hasChildren(is(targetNumResults))
         ));
+
+        // Verify that they're the correct results
+        onView(nthChildOf(nthChildOf(withId(R.id.searchResultsContainer),
+                0), 0)).check(matches(withText(containsString("Jane Doe"))));
+        onView(nthChildOf(nthChildOf(withId(R.id.searchResultsContainer),
+                1), 0)).check(matches(withText(containsString("J.T. Thomas"))));
     }
 
     // hasChildren matcher from: https://stackoverflow.com/questions/23797401/using-espresso-how-do-i-check-the-number-of-items-in-my-alert-dialog
