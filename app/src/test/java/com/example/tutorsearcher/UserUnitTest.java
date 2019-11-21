@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class UserUnitTest
 {
@@ -61,6 +62,24 @@ public class UserUnitTest
         newAvailabilityList.add("Thu 10");
         tutor.setAvailability(newAvailabilityList);
         assertEquals(tutor.getAvailability(), new ArrayList<String>(Arrays.asList("Mon 15", "Wed 8", "Thu 10")));
+    }
+    @Test
+    public void testTutorIsAvailable()
+    {
+        User tutor = new Tutor("tutortest@email.com");
+        tutor.setProfilePic("profilepic.jpg");
+        tutor.setName("name");
+        tutor.setAge(20);
+        tutor.setGender("female");
+        ArrayList<String> newAvailabilityList = new ArrayList<String>();
+        newAvailabilityList.add("Mon 15");
+        newAvailabilityList.add("Wed 8");
+        newAvailabilityList.add("Thu 10");
+        tutor.setAvailability(newAvailabilityList);
+        assertTrue(((Tutor)tutor).isAvailable("Mon 15.5"));
+        assertTrue(((Tutor)tutor).isAvailable("Mon 15"));
+        assertTrue(((Tutor)tutor).isAvailable("Wed 8.8"));
+        assertFalse(((Tutor)tutor).isAvailable("Mon 19"));
     }
     /**
      * test if setting and adding courses to the tutor's list works
