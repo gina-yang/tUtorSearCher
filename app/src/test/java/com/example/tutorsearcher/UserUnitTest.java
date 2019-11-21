@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 public class UserUnitTest
@@ -98,7 +99,9 @@ public class UserUnitTest
         tutor.setRating(4);
         tutor.addRating(5);
         assertEquals(tutor.getNumRatings(),11);
-        Log.d("rating",Double.toString(tutor.getRating()));
-        assertEquals(tutor.getRating(),(double)((((4.0*10.0)+5.0)/11.0)));
+        System.out.println(Double.toString(tutor.getRating()));
+        System.out.println(Double.toString((double)((((4.0*10.0)+5.0)/11.0))));
+       // Log.d("rating",Double.toString(tutor.getRating()));
+        assertTrue(0.0001 > Math.abs(tutor.getRating() - (double)((((4.0*10.0)+5.0)/11.0))));
     }
 }
