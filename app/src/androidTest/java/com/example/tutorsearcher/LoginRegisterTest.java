@@ -18,6 +18,7 @@ import static org.junit.Assert.assertTrue;
 
 public class LoginRegisterTest {
     DBAccessor dba;
+    boolean isNewFlag;
     @Before
     public void setup(){
         dba = new DBAccessor();
@@ -29,9 +30,12 @@ public class LoginRegisterTest {
 
     @Test
     public void testIsNewUser(){
+
+
         class userExists extends isNewUserCommandWrapper {
             public void execute(boolean isNew){
-                assertFalse(isNew);
+//                assertFalse(isNew);
+                isNewFlag = false;
             }
         }
         class wrongRole extends isNewUserCommandWrapper {
@@ -45,7 +49,9 @@ public class LoginRegisterTest {
             }
         }
         System.out.println("testing123");
+
         dba.isNewUser("utesttutee@usc.edu", "tutee", new userExists());
+        assertTrue(isNewFlag);
         dba.isNewUser("utesttutee@usc.edu", "tutor", new wrongRole());
         dba.isNewUser("utesttutor@usc.edu", "tutee", new wrongRole());
         dba.isNewUser("blahblahblah@usc.edu", "tutee", new doesntExist());
