@@ -4,57 +4,43 @@ import android.util.Log;
 
 import com.example.tutorsearcher.db.DBAccessor;
 import com.example.tutorsearcher.db.isNewUserCommandWrapper;
-import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mockito;
-
-import static org.mockito.Mockito.*;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class LoginRegisterTest {
-    DBAccessor dba;
-    boolean isNewFlag;
+    private DBAccessor dba;
+    private boolean isNewFlag = true;
+
+
     @Before
     public void setup(){
         dba = new DBAccessor();
-
-        dba.addNewUser("utesttutee@usc.edu", "password", "Tutee");
-        dba.addNewUser("utesttutor@usc.edu", "password", "Tutor");
-        Log.d("hello","hello");
+        dba.addNewUser("ginatesttutee@usc.edu", "password", "Tutee");
+        dba.addNewUser("ginatesttutor@usc.edu", "password", "Tutor");
     }
 
     @Test
     public void testIsNewUser(){
-
-
         class userExists extends isNewUserCommandWrapper {
             public void execute(boolean isNew){
-//                assertFalse(isNew);
-                isNewFlag = false;
+                isNewFlag = isNew;
             }
         }
-        class wrongRole extends isNewUserCommandWrapper {
-            public void execute(boolean isNew){
-                assertTrue(isNew);
-            }
-        }
-        class doesntExist extends isNewUserCommandWrapper {
-            public void execute(boolean isNew){
-                assertTrue(isNew);
-            }
-        }
-        System.out.println("testing123");
 
-        dba.isNewUser("utesttutee@usc.edu", "tutee", new userExists());
+        dba.isNewUser("ginatesttutee@usc.edu", "tutee", new userExists());
+        assertFalse(isNewFlag); // We created this user: not new
+        dba.isNewUser("ginatesttutor@usc.edu", "tutor", new userExists());
+        assertFalse(isNewFlag); // We created this user: not new
+        dba.isNewUser("ginatesttutee@usc.edu", "tutor", new userExists());
+        assertTrue(isNewFlag); // Wrong role: new
+        dba.isNewUser("blahblahblah@usc.edu", "tutee", new userExists());
         assertTrue(isNewFlag);
-        dba.isNewUser("utesttutee@usc.edu", "tutor", new wrongRole());
-        dba.isNewUser("utesttutor@usc.edu", "tutee", new wrongRole());
-        dba.isNewUser("blahblahblah@usc.edu", "tutee", new doesntExist());
     }
 
     @Ignore
