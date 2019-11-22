@@ -1,5 +1,7 @@
-package com.example.tutorsearcher;
+package com.example.tutorsearcher.whitebox;
 
+import com.example.tutorsearcher.Tutee;
+import com.example.tutorsearcher.User;
 import com.example.tutorsearcher.db.DBAccessor;
 import com.example.tutorsearcher.db.getProfileCommandWrapper;
 

@@ -1,13 +1,11 @@
-package com.example.tutorsearcher;
+package com.example.tutorsearcher.whitebox;
 
 import com.example.tutorsearcher.db.DBAccessor;
 import com.example.tutorsearcher.db.isNewUserCommandWrapper;
 import com.example.tutorsearcher.db.validateUserCommandWrapper;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

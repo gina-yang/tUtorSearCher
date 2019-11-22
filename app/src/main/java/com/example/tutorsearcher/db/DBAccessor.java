@@ -184,7 +184,7 @@ public class DBAccessor {
      */
     public void getAllRequests(String email, String role, final getRequestsCommandWrapper wrapper){
         Log.d("ben", "collecting all requests for email "+email+ " and role "+role);
-        rlist = new ArrayList<Request>(); // ? A way to make it not final?
+        rlist = new ArrayList<Request>();
         CollectionReference reqRef = db.collection("requests");
         reqRef.whereEqualTo(role+"Email", email)
                 .get()
