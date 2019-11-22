@@ -1,6 +1,7 @@
 package com.example.tutorsearcher.whitebox;
 
 import com.example.tutorsearcher.Tutee;
+import com.example.tutorsearcher.Tutor;
 import com.example.tutorsearcher.User;
 import com.example.tutorsearcher.db.DBAccessor;
 import com.example.tutorsearcher.db.getProfileCommandWrapper;
@@ -54,7 +55,13 @@ public class ProfileTest {
         u.setGender("F");
         dba.updateProfile(u);
 
-        class profileCheck extends getProfileCommandWrapper {
+        User u1 = new Tutor("ginaprtesttutee@usc.edu");
+        u1.setName("Test Tutor");
+        u1.setAge(19);
+        u1.setGender("M");
+        dba.updateProfile(u1);
+
+        class tuteeProfileCheck extends getProfileCommandWrapper {
             public void execute(User u){
                 assertTrue(u.getName().equals("Test Tutee"));
                 assertTrue(u.getEmail().equals("ginaprtesttutee@usc.edu"));
@@ -64,6 +71,18 @@ public class ProfileTest {
                 assertTrue(u.getType().equals("tutee"));
             }
         }
-        dba.getProfile("ginaprtesttutee@usc.edu", "tutee", new profileCheck());
+
+        class tutorProfileCheck extends getProfileCommandWrapper {
+            public void execute(User u){
+                assertTrue(u.getName().equals("Test Tutor"));
+                assertTrue(u.getEmail().equals("ginaprtesttutor@usc.edu"));
+                assertTrue(u.getGender().equals("M"));
+                assertEquals(u.getAge(), 19);
+                assertEquals(u.getNumRatings(), 0);
+                assertTrue(u.getType().equals("tutor"));
+            }
+        }
+        dba.getProfile("ginaprtesttutee@usc.edu", "tutee", new tuteeProfileCheck());
+        dba.getProfile("ginaprtesttutor@usc.edu", "tutor", new tutorProfileCheck());
     }
 }
