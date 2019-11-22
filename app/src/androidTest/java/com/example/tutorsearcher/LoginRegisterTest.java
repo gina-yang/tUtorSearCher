@@ -1,22 +1,19 @@
 package com.example.tutorsearcher;
 
-import android.util.Log;
-
 import com.example.tutorsearcher.db.DBAccessor;
 import com.example.tutorsearcher.db.isNewUserCommandWrapper;
+import com.example.tutorsearcher.db.validateUserCommandWrapper;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class LoginRegisterTest {
     private DBAccessor dba;
-    private boolean isNewFlag = true;
-
 
     @Before
     public void setup(){
@@ -29,22 +26,47 @@ public class LoginRegisterTest {
     public void testIsNewUser(){
         class userExists extends isNewUserCommandWrapper {
             public void execute(boolean isNew){
-                isNewFlag = isNew;
+                assertFalse(isNew);
+            }
+        }
+        class wrongRole extends isNewUserCommandWrapper {
+            public void execute(boolean isNew){
+                assertTrue(isNew);
+            }
+        }
+        class doesntExist extends isNewUserCommandWrapper {
+            public void execute(boolean isNew){
+                assertTrue(isNew);
+            }
+        }
+        dba.isNewUser("utesttutee@usc.edu", "tutee", new userExists());
+        dba.isNewUser("utesttutee@usc.edu", "tutor", new wrongRole());
+        dba.isNewUser("utesttutor@usc.edu", "tutee", new wrongRole());
+        dba.isNewUser("blahblahblah@usc.edu", "tutee", new doesntExist());
+    }
+
+    @Test
+    public void testValidateUser(){
+        class valUser extends validateUserCommandWrapper {
+            public void doValidate(boolean loggedin){
+                assertTrue(loggedin);
+            }
+        }
+        class wrongPass extends validateUserCommandWrapper {
+            public void doValidate(boolean loggedin){
+                assertFalse(loggedin);
+            }
+        }
+        class userDNE extends validateUserCommandWrapper {
+            public void doValidate(boolean loggedin){
+                assertFalse(loggedin);
             }
         }
 
-        dba.isNewUser("ginatesttutee@usc.edu", "tutee", new userExists());
-        assertFalse(isNewFlag); // We created this user: not new
-        dba.isNewUser("ginatesttutor@usc.edu", "tutor", new userExists());
-        assertFalse(isNewFlag); // We created this user: not new
-        dba.isNewUser("ginatesttutee@usc.edu", "tutor", new userExists());
-        assertTrue(isNewFlag); // Wrong role: new
-        dba.isNewUser("blahblahblah@usc.edu", "tutee", new userExists());
-        assertTrue(isNewFlag);
-    }
-
-    @Ignore
-    public void testValidateUser(){
-
+        dba.validateUser("ginatesttutee@usc.edu", "password", "Tutee", new valUser());
+        dba.validateUser("ginatesttutor@usc.edu", "password", "Tutor", new valUser());
+        dba.validateUser("ginatesttutee@usc.edu", "passw", "Tutee", new valUser());
+        dba.validateUser("ginatesttutor@usc.edu", "12345", "Tutor", new valUser());
+        dba.validateUser("dnetutor@usc.edu", "password", "Tutor", new valUser());
     }
 }

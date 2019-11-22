@@ -47,6 +47,7 @@ public class DBAccessor {
      * @param wrapper wrapper for this function
      */
     public void isNewUser(String email, String role, final isNewUserCommandWrapper wrapper){
+        System.out.println("called isNewUser");
         DocumentReference docRef = db.collection(role+"s").document(email);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
