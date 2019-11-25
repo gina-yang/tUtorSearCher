@@ -47,6 +47,7 @@ public class DBAccessor {
      * @param wrapper wrapper for this function
      */
     public void isNewUser(String email, String role, final isNewUserCommandWrapper wrapper){
+        System.out.println("called isNewUser");
         DocumentReference docRef = db.collection(role+"s").document(email);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -183,7 +184,7 @@ public class DBAccessor {
      */
     public void getAllRequests(String email, String role, final getRequestsCommandWrapper wrapper){
         Log.d("ben", "collecting all requests for email "+email+ " and role "+role);
-        rlist = new ArrayList<Request>(); // ? A way to make it not final?
+        rlist = new ArrayList<Request>();
         CollectionReference reqRef = db.collection("requests");
         reqRef.whereEqualTo(role+"Email", email)
                 .get()

@@ -227,6 +227,8 @@ public class RequestsFragment extends Fragment {
                 requestInfo.setText(request.tutorName + "\n"+request.course+" "+request.time);
                 requestInfo.setTextSize(20);
                 horizontalLayout.addView(requestInfo);
+                // Print out the ID of the newly created view
+                Log.d("requestInfo", "requestInfo Text: "+requestInfo.getText());
                 if(request.status.toLowerCase().equals("pending"))
                 {//request is pending, so the user cannot see the tutor's email
                     Button pendingButton = new Button(getContext());//button to accept
