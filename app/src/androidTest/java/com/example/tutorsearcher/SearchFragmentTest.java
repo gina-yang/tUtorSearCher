@@ -45,7 +45,7 @@ public class SearchFragmentTest{
         {
 
             // email_results is an ArrayList of all the matching emails that fit the search criteria
-            //@Test
+            @Test
             public void execute2(ArrayList<User> user_results)
             {
                 results = user_results;
