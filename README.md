@@ -12,6 +12,9 @@ students seeking help in their classes.
 7. Choose Pixel 2 XL API 23 as the device for the emulator.
 8. Run the app.
 
+### New Features
+1. A button allowing user log out has been added to the profile page.
+
 ### Tips for Usage
 
 1. Start by creating a Tutor account. Enter some credentials and hit Register.

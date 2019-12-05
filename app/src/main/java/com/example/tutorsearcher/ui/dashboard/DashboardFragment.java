@@ -1,6 +1,7 @@
 package com.example.tutorsearcher.ui.dashboard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import com.example.tutorsearcher.R;
 import com.example.tutorsearcher.User;
+import com.example.tutorsearcher.activity.MainActivity;
 import com.example.tutorsearcher.db.DBAccessor;
 import com.example.tutorsearcher.db.getProfileCommandWrapper;
 import com.example.tutorsearcher.ui.login.LoginActivity;
@@ -29,6 +31,11 @@ public class DashboardFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
     private DBAccessor dba = new DBAccessor();
+
+    public void openLogin(){
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -49,6 +56,7 @@ public class DashboardFragment extends Fragment {
         final TextView courses_label = root.findViewById(R.id.textView5);
         final TextView availability_label = root.findViewById(R.id.textView6);
         Button button = root.findViewById(R.id.edit_profile_button);
+        Button logout = root.findViewById(R.id.logout_button);
 
         // Load profile data from DB
         User u = LoginActivity.loggedInUser;
@@ -73,6 +81,12 @@ public class DashboardFragment extends Fragment {
             availability_text.setVisibility(View.INVISIBLE);
             availability_label.setVisibility(View.INVISIBLE);
         }
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v){
+                openLogin();
+            }
+        });
 
         // add functionality for button to edit profile fields
         button.setOnClickListener(new View.OnClickListener() {
