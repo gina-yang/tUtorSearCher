@@ -2,6 +2,7 @@ package com.example.tutorsearcher.ui.home;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.example.tutorsearcher.Request;
 import com.example.tutorsearcher.Tutee;
 import com.example.tutorsearcher.User;
 import com.example.tutorsearcher.db.DBAccessor;
+import com.example.tutorsearcher.db.getRequestsCommandWrapper;
 import com.example.tutorsearcher.db.searchCommandWrapper;
 import com.example.tutorsearcher.ui.login.LoginActivity;
 
@@ -87,22 +89,6 @@ public class SearchFragment extends Fragment{
                 DBAccessor dba = new DBAccessor();
                 searchResultWrapper resultWrapper = new searchResultWrapper();
                 dba.search(className, dayTimeStr, resultWrapper);//search for tutor with the given class and time
-                //for testing puposes, Jane Doe teaches CS 310 Monday 14 o clock
-
-                /*
-                //TEST CODE
-                //create view to add to the linear layout
-                LinearLayout testview = new LinearLayout(getContext());//make view to hold image and text button
-                testview.setOrientation(LinearLayout.HORIZONTAL);//make layout horizontal
-                Button myButton = new Button(getContext());//button to hold text
-                myButton.setText("Bob");
-
-                myButton.setTextAppearance(getContext(), R.style.SearchResultStyle);//set style of button to our stored style
-                //add button to the view
-                testview.addView(myButton);
-                searchResultsContainer.addView(testview);//add the view containing the info to the screen
-
-                 */
             }
         });
 
@@ -139,7 +125,6 @@ public class SearchFragment extends Fragment{
                 imageView.setMaxWidth(85);
                 //add the image to the view
 
-
                 final Button myButton = new Button(getContext());//button to hold text
                 int width = (int) (213 * scale + 0.5f);//convert width/height to dp units
                 int height = (int) (85 * scale + 0.5f);//convert width/height to dp units
@@ -150,6 +135,7 @@ public class SearchFragment extends Fragment{
                 //when button is clicked, a rwquest should be sent to the tutor. The info in the request will be held in the button text
                 myButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
+                        //when send request is clicked, we first need to check if this request has been sent already or not
                         Log.d("click!","in onClick");
                         //create a new request and send it
                         User tutor = buttonMap.get(myButton);//this is the tutor to send request to
@@ -161,13 +147,12 @@ public class SearchFragment extends Fragment{
                         String time = daySpinner.getSelectedItem().toString() + " " + timeSpinner.getSelectedItem().toString();
                         Request request = new Request(tuteeName,tutorName,tuteeEmail,tutorEmail,"pending",course,time);
                         //now add the request to the database
-                        mDBAccessor.addRequest(LoginActivity.loggedInUser.getEmail(),request);
-                        String requestMessage = "Sent request to "+tutorName+" for the class "+course+" at "+time+".";
-                        Toast toast = Toast.makeText(getContext(), requestMessage, Toast.LENGTH_LONG);
-                        toast.show();
+                        //TODO: check if request with same time has already been sent or not
+                        DBAccessor dba = new DBAccessor();
+                        sendRequestFromSearchResultWrapper sendRequestWrapper = new sendRequestFromSearchResultWrapper(tutor);
+                        dba.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType(), sendRequestWrapper);//search for tutor with the given class and time
                     }
                 });
-                //myButton.setOnClickListener(this); // calling onClick() method
                 myButton.setWidth(width);
                 myButton.setHeight(height);
                 myButton.setText(results.get(i).getName());//button will contain the tutor's name
@@ -177,6 +162,65 @@ public class SearchFragment extends Fragment{
                 searchResultsContainer.addView(imagetextview);//add the view containing the info to the screen
             }
 
+        }
+    }
+
+    /**
+     * After the search results come up, we need another wrapper to check all the exiting requests between
+     * the tutee and tutor being requested
+     */
+    public class sendRequestFromSearchResultWrapper extends getRequestsCommandWrapper
+    {
+        User tutor;
+        public sendRequestFromSearchResultWrapper(User tutor)
+        {
+            this.tutor = tutor;
+        }
+        float scale = getContext().getResources().getDisplayMetrics().density;//scale to convert to dp units
+        public ArrayList<Request> results = new ArrayList<Request>();
+        // email_results is an ArrayList of all the matching emails that fit the search criteria
+        public void execute(ArrayList<Request> requests)
+        {
+            Log.d("kara", ""+results.size());
+            String course = textView.getText().toString();
+            String time = daySpinner.getSelectedItem().toString() + " " + timeSpinner.getSelectedItem().toString();
+            String tuteeEmail = LoginActivity.loggedInUser.getEmail();
+            String tuteeName = LoginActivity.loggedInUser.getName();
+            boolean alreadyRequested = false;//tells if tutee already sent this request
+            for(Request request: requests)
+            {
+                //check if this current request has already been sent
+                Log.d("requesttime",request.time);
+                Log.d("time",time);
+                Log.d("requestcourse",request.course);
+                Log.d("course",course);
+                Log.d("request tutee email",request.tuteeEmail);
+                Log.d("tutee email",tuteeEmail);
+                Log.d("request tutor email",request.tutorEmail);
+                Log.d("tutor email",tutor.getEmail());
+                if(request.time.equals(time) && request.course.equals(course)&& request.tuteeEmail.equals(tuteeEmail)
+                        && request.tutorEmail.equals(tutor.getEmail()) && !request.status.equals("rejected"))
+                {
+                    //tuee has already sent this request to tutor
+                    alreadyRequested = true;
+                    //cannot send request because it has already been sent. make pop up saying request has already been sent
+                }
+            }
+            //now that we checked all existing requests, send request if it hasn't been sent already, don't if it has
+            if(alreadyRequested == true)
+            {
+                //cannot send request because it has already been sent. make pop up saying request has already been sent
+                Toast toast = Toast.makeText(getContext(), "Request has already been sent", Toast.LENGTH_LONG);
+                toast.show();
+            }
+            else//request has not been sent yet. send it
+            {//(String tuteeName, String tutorName,String tuteeEmail, String tutorEmail, String status, String course, String time)
+                Request newRequest = new Request(tuteeName,tutor.getName(),tuteeEmail,tutor.getEmail(),"pending",course,time);
+                mDBAccessor.addRequest(LoginActivity.loggedInUser.getEmail(),newRequest);
+                String requestMessage = "Sent request to "+tutor.getName()+" for the class "+course+" at "+time+".";
+                Toast toast = Toast.makeText(getContext(), requestMessage, Toast.LENGTH_LONG);
+                toast.show();
+            }
         }
     }
 }
