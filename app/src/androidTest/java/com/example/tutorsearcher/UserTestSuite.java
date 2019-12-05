@@ -436,6 +436,97 @@ public class UserTestSuite {
         editText3.check(matches(withText("M")));
     }
 
+    @Test
+    public void userViewEmail() {
+        // Added a sleep statement to match the app's execution delay.
+        // The recommended way to handle such scenarios is to use Espresso idling resources:
+        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ViewInteraction appCompatEditText = onView(
+                Matchers.allOf(withId(R.id.username),
+                        childAtPosition(
+                                Matchers.allOf(withId(R.id.container),
+                                        childAtPosition(
+                                                withId(android.R.id.content),
+                                                0)),
+                                0),
+                        isDisplayed()));
+        appCompatEditText.perform(replaceText("dontdeletetutee@usc.edu"), closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText2 = onView(
+                Matchers.allOf(withId(R.id.password),
+                        childAtPosition(
+                                Matchers.allOf(withId(R.id.container),
+                                        childAtPosition(
+                                                withId(android.R.id.content),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        appCompatEditText2.perform(replaceText("123456"), closeSoftKeyboard());
+
+        ViewInteraction appCompatSpinner = onView(
+                Matchers.allOf(withId(R.id.spinner),
+                        childAtPosition(
+                                Matchers.allOf(withId(R.id.container),
+                                        childAtPosition(
+                                                withId(android.R.id.content),
+                                                0)),
+                                4),
+                        isDisplayed()));
+        appCompatSpinner.perform(click());
+
+        DataInteraction appCompatCheckedTextView = onData(anything())
+                .inAdapterView(childAtPosition(
+                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+                        0))
+                .atPosition(1);
+        appCompatCheckedTextView.perform(click());
+
+        ViewInteraction appCompatButton = onView(
+                Matchers.allOf(withId(R.id.login), withText("Log In"),
+                        childAtPosition(
+                                Matchers.allOf(withId(R.id.container),
+                                        childAtPosition(
+                                                withId(android.R.id.content),
+                                                0)),
+                                2),
+                        isDisplayed()));
+        appCompatButton.perform(click());
+
+        // Added a sleep statement to match the app's execution delay.
+        // The recommended way to handle such scenarios is to use Espresso idling resources:
+        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ViewInteraction bottomNavigationItemView = onView(
+                Matchers.allOf(withId(R.id.navigation_notifications), withContentDescription("Requests"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.nav_view),
+                                        0),
+                                2),
+                        isDisplayed()));
+        bottomNavigationItemView.perform(click());
+
+        ViewInteraction button = onView(
+                Matchers.allOf(childAtPosition(
+                        childAtPosition(
+                                withId(R.id.requestsContainer),
+                                0),
+                        2),
+                        isDisplayed()));
+        button.check(matches(isDisplayed()));
+    }
+
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
