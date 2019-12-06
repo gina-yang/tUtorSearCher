@@ -224,10 +224,17 @@ public class RequestsFragment extends Fragment {
                 horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);//make layout horizontal
                 TextView requestInfo = new TextView(getContext());//holds the tutors's name, class, and time for their request, and email if request has been accepted
                 requestInfo.setWidth((int) (213 * scale + 0.5f));
-                requestInfo.setHeight((int) (85 * scale + 0.5f));
+                requestInfo.setHeight((int) (120 * scale + 0.5f));
                 //get all the info from the tutee request
-                requestInfo.setText(request.tutorName + "\n"+request.course+" "+request.time);
-                requestInfo.setTextSize(20);
+
+
+                if(request.status.toLowerCase().equals("accepted"))
+                {
+                    requestInfo.setText(request.tutorName + "\n"+request.course+" "+request.time + "\n" + request.tutorEmail);
+                } else {
+                    requestInfo.setText(request.tutorName + "\n"+request.course+" "+request.time);
+                }
+                requestInfo.setTextSize(18);
                 horizontalLayout.addView(requestInfo);
                 // Print out the ID of the newly created view
                 Log.d("requestInfo", "requestInfo Text: "+requestInfo.getText());
@@ -253,9 +260,12 @@ public class RequestsFragment extends Fragment {
                     //create another button that shows the tutor's email for contact
                     Button emailButton = new Button(getContext());//button to accept
                     emailButton.setGravity(Gravity.RIGHT);
-                    emailButton.setWidth((int) (105 * scale + 0.5f));
+                    emailButton.setWidth((int) (250 * scale + 0.5f));
                     emailButton.setHeight((int) (60 * scale + 0.5f));
                     emailButton.setText(request.tutorEmail);
+                    emailButton.setTextSize(12);
+
+
 
                     //add the buttons to the horiz layout
                     horizontalLayout.addView(acceptedButton);
