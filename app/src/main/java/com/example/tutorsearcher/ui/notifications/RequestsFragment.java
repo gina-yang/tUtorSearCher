@@ -135,7 +135,7 @@ public class RequestsFragment extends Fragment {
                     acceptButton.setWidth((int) (105 * scale + 0.5f));
                     acceptButton.setHeight((int) (60 * scale + 0.5f));
                     acceptButton.setText("Accept");
-                    acceptButton.setTextSize(25);
+                    acceptButton.setTextSize(14);
                     acceptButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             Log.d("click!","in onClick");
@@ -162,6 +162,7 @@ public class RequestsFragment extends Fragment {
                     rejectButton.setWidth((int) (105 * scale + 0.5f));
                     rejectButton.setHeight((int) (60 * scale + 0.5f));
                     rejectButton.setText("Reject");
+                    rejectButton.setTextSize(14);
                     rejectButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             Log.d("click!","in onClick");
@@ -197,6 +198,7 @@ public class RequestsFragment extends Fragment {
                     acceptedButton.setWidth((int) (105 * scale + 0.5f));
                     acceptedButton.setHeight((int) (60 * scale + 0.5f));
                     acceptedButton.setText("Accepted");
+                    acceptedButton.setTextSize(14);
                     //add the button to the hashmap, and make its value the request this button is handling
                     requestMap.put(acceptedButton,request);
                     //add the buttons to the horiz layout
