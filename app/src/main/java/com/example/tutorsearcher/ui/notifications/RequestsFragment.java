@@ -79,29 +79,6 @@ public class RequestsFragment extends Fragment {
             //mDBAccessor.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType());
             // Log.d("reqeusts size", ""+requests.size());
             //iterate through all the request and show their status
-            //TODO this is just a test, we will use the lines above to get the requests in the real version
-            /*ArrayList<Request> requests = new ArrayList<Request>();
-            requests.add(new Request("tuteeName", "tutorName","tuteeEmail",
-                    "tutorEmail", "pending", "cs310", "mon 3-4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-            requests.add(new Request("tuteeName2", "tutorName2","tuteeEmail2",
-                    "tutorEmail2", "accepted", "cs310", "mon 3-s4pm"));
-
-             */
         }
         return root;
     }
@@ -265,8 +242,6 @@ public class RequestsFragment extends Fragment {
                     emailButton.setHeight((int) (60 * scale + 0.5f));
                     emailButton.setText(request.tutorEmail);
                     emailButton.setTextSize(12);
-
-
 
                     //add the buttons to the horiz layout
                     horizontalLayout.addView(acceptedButton);

@@ -41,6 +41,7 @@ import com.example.tutorsearcher.ui.login.LoginViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
     public static User loggedInUser = new Tutor("oza@usc.edu");
+    public static User tutorToView = new Tutor("tutor@usc.edu");
     private LoginViewModel loginViewModel;
     private LoginViewModel registerViewModel;
     DBAccessor dba = new DBAccessor();

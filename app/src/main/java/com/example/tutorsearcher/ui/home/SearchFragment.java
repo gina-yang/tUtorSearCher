@@ -1,5 +1,6 @@
 package com.example.tutorsearcher.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,11 +24,14 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.tutorsearcher.R;
 import com.example.tutorsearcher.Request;
 import com.example.tutorsearcher.Tutee;
+import com.example.tutorsearcher.Tutor;
 import com.example.tutorsearcher.User;
+import com.example.tutorsearcher.activity.MainActivity;
 import com.example.tutorsearcher.db.DBAccessor;
 import com.example.tutorsearcher.db.getRequestsCommandWrapper;
 import com.example.tutorsearcher.db.searchCommandWrapper;
 import com.example.tutorsearcher.ui.login.LoginActivity;
+import com.example.tutorsearcher.ui.tutorProfileView.tutorProfileViewFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -135,22 +139,27 @@ public class SearchFragment extends Fragment{
                 //when button is clicked, a rwquest should be sent to the tutor. The info in the request will be held in the button text
                 myButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        //when send request is clicked, we first need to check if this request has been sent already or not
-                        Log.d("click!","in onClick");
-                        //create a new request and send it
+//                        //when send request is clicked, we first need to check if this request has been sent already or not
+//                        Log.d("click!","in onClick");
+//                        //create a new request and send it
                         User tutor = buttonMap.get(myButton);//this is the tutor to send request to
-                        String tuteeName = LoginActivity.loggedInUser.getName();
-                        String tutorName = tutor.getName();
-                        String tuteeEmail = LoginActivity.loggedInUser.getEmail();
+//                        String tuteeName = LoginActivity.loggedInUser.getName();
+//                        String tutorName = tutor.getName();
+//                        String tuteeEmail = LoginActivity.loggedInUser.getEmail();
                         String tutorEmail = tutor.getEmail();
-                        String course = textView.getText().toString();
-                        String time = daySpinner.getSelectedItem().toString() + " " + timeSpinner.getSelectedItem().toString();
-                        Request request = new Request(tuteeName,tutorName,tuteeEmail,tutorEmail,"pending",course,time);
-                        //now add the request to the database
-                        //TODO: check if request with same time has already been sent or not
-                        DBAccessor dba = new DBAccessor();
-                        sendRequestFromSearchResultWrapper sendRequestWrapper = new sendRequestFromSearchResultWrapper(tutor);
-                        dba.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType(), sendRequestWrapper);//search for tutor with the given class and time
+//                        String course = textView.getText().toString();
+//                        String time = daySpinner.getSelectedItem().toString() + " " + timeSpinner.getSelectedItem().toString();
+//                        Request request = new Request(tuteeName,tutorName,tuteeEmail,tutorEmail,"pending",course,time);
+//                        //now add the request to the database
+//                        //TODO: check if request with same time has already been sent or not
+//                        DBAccessor dba = new DBAccessor();
+//                        sendRequestFromSearchResultWrapper sendRequestWrapper = new sendRequestFromSearchResultWrapper(tutor);
+//                        dba.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType(), sendRequestWrapper);//search for tutor with the given class and time
+                          //view profile
+                        Log.d("click","click on tuor profile");
+                        LoginActivity.tutorToView = new Tutor(tutorEmail);
+                        openTutorProfile();
+
                     }
                 });
                 myButton.setWidth(width);
@@ -161,7 +170,6 @@ public class SearchFragment extends Fragment{
                 imagetextview.addView(myButton);
                 searchResultsContainer.addView(imagetextview);//add the view containing the info to the screen
             }
-
         }
     }
 
@@ -222,5 +230,11 @@ public class SearchFragment extends Fragment{
                 toast.show();
             }
         }
+    }
+    public void openTutorProfile()
+    {
+        Log.d("open tutor profile","in open tutor profile");
+        Intent intent = new Intent(getActivity(), tutorProfileViewFragment.class);
+        startActivity(intent);
     }
 }
