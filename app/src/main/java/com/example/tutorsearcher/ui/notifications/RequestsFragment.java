@@ -144,6 +144,7 @@ public class RequestsFragment extends Fragment {
                             request1.status = "accepted";//accept the request
                             //now add the request to the database
                             mDBAccessor.updateRequest(request1);
+                            mDBAccessor.removeAvailability(request1.tutorEmail, request1.time);
                             String requestMessage = "Accepted "+request1.tuteeName+"'s request for "+request1.course+" at "+request1.time+".";
                             Toast toast = Toast.makeText(getContext(), requestMessage, Toast.LENGTH_LONG);
                             toast.show();

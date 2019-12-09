@@ -2,6 +2,7 @@ package com.example.tutorsearcher.db;
 
 import android.util.Log;
 
+import com.example.tutorsearcher.Availability;
 import com.example.tutorsearcher.User;
 import com.example.tutorsearcher.Tutor;
 import com.example.tutorsearcher.Tutee;
@@ -16,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -259,8 +261,16 @@ public class DBAccessor {
                 });
     }
 
-    // Update user profile [works for both tutor and tutee using polymorphism] (Ben)
-    // Takes in a User and updates all fields in Firebase
+    /**
+     * Remove tutor availablity after they accept a request
+     * @param email tutor's email
+     * @param availability time to be removed
+     */
+    public void removeAvailability(final String email, String availability){
+        db.collection("tutors").document(email)
+                .update("availability", FieldValue.arrayRemove(availability));
+    }
+
     /**
      * Update user profile [works for both tutor and tutee using polymorphism]
      * @param u user to be updated
