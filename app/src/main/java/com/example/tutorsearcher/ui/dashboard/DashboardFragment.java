@@ -116,15 +116,16 @@ public class DashboardFragment extends Fragment {
                     u.setAge(Long.parseLong(agetext.getText().toString()));
                     u.setGender(gendertext.getText().toString());
 
-                    // Set courses and availability
-                    String [] c = courses_text.getText().toString().split("\n");
-                    ArrayList<String> clist = new ArrayList<String>(Arrays.asList(c));
-                    u.setCourses(clist);
+                    if( u.getType().equals("tutor")){
+                        // Set courses and availability
+                        String [] c = courses_text.getText().toString().split("\n");
+                        ArrayList<String> clist = new ArrayList<String>(Arrays.asList(c));
+                        u.setCourses(clist);
 
-                    String [] a = availability_text.getText().toString().split("\n");
-                    ArrayList<String> alist = new ArrayList<String>(Arrays.asList(a));
-                    u.setAvailability(alist);
-
+                        String [] a = availability_text.getText().toString().split("\n");
+                        ArrayList<String> alist = new ArrayList<String>(Arrays.asList(a));
+                        u.setAvailability(alist);
+                    }
                     dba.updateProfile(u);
                 }
             }
