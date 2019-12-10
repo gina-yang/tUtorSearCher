@@ -43,6 +43,7 @@ public class SearchFragment extends Fragment{
     HashMap<Button, User> buttonMap = new HashMap<Button, User>();
     Spinner daySpinner;//drop down menu for the day to be searched
     Spinner timeSpinner;//drop down menu for the time to be searched
+    Spinner courseSpinner;//drop down menu for the course to be searched
     EditText textView;//hold the course user is searching for
     //create a db acessor that will be used to do search
     DBAccessor mDBAccessor = new DBAccessor();
@@ -60,7 +61,7 @@ public class SearchFragment extends Fragment{
             }
         });*/
         //final EditText passwordEditText = findViewById(R.id.searchText);
-        textView = root.findViewById(R.id.searchText);
+        //textView = root.findViewById(R.id.searchText);
         final Button searchButton = root.findViewById(R.id.searchButton);
         //this is the vertical scrolling layout that will hold all of the search results
         searchResultsContainer = (LinearLayout) root.findViewById(R.id.searchResultsContainer);
@@ -79,13 +80,20 @@ public class SearchFragment extends Fragment{
         timeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         timeSpinner.setAdapter(timeAdapter);
 
+        //drop down menu for courses
+        courseSpinner = (Spinner)root.findViewById(R.id.courseSpinner);
+        ArrayAdapter<String> courseAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.CourseSpinnerOptions));
+        courseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        courseSpinner.setAdapter(courseAdapter);
+
         //what happens when we click in search button?
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 searchResultsContainer.removeAllViews();//clear the search result container
-                String className = textView.getText().toString();//class user is searching for
+                String className = courseSpinner.getSelectedItem().toString();//class user is searching for
                 String day = daySpinner.getSelectedItem().toString();//day user is searching for
                 String time =timeSpinner.getSelectedItem().toString();//time user is searching for
                 String dayTimeStr = day + " " + time;

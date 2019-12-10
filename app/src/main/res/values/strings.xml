@@ -30,6 +30,16 @@
         <item>Sat</item>
     </string-array>
 
+    <string-array name="CourseSpinnerOptions">
+        <item>CSCI103</item>
+        <item>CSCI104</item>
+        <item>CSCI109</item>
+        <item>CSCI170</item>
+        <item>CSCI201</item>
+        <item>CSCI270</item>
+        <item>CSCI310</item>
+    </string-array>
+
     <string-array name="TimeSpinnerOptions">
         <item>07</item>
         <item>08</item>

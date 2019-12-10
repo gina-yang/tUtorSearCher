@@ -5,29 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Spinner
+        android:id="@+id/courseSpinner"
+        android:layout_width="281dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/searchButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="19dp"
+        android:layout_marginTop="12dp"
         android:background="@android:drawable/ic_menu_search"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/searchText"
-        app:layout_constraintTop_toTopOf="@+id/searchText" />
-
-    <EditText
-        android:id="@+id/searchText"
-        android:layout_width="280dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="Search"
-        android:inputType="textPersonName"
-        android:text=""
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.35"
+        app:layout_constraintStart_toEndOf="@+id/courseSpinner"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
@@ -35,26 +31,26 @@
         android:layout_width="120dp"
         android:layout_height="40dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchText" />
+        app:layout_constraintTop_toBottomOf="@+id/courseSpinner" />
 
     <Spinner
         android:id="@+id/timeSpinner"
         android:layout_width="120dp"
         android:layout_height="40dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintStart_toEndOf="@+id/daySpinner"
-        app:layout_constraintTop_toBottomOf="@+id/searchText" />
+        app:layout_constraintTop_toBottomOf="@+id/courseSpinner" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="409dp"
         android:layout_height="603dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="72dp"
         android:fillViewport="true"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchText">
+        app:layout_constraintTop_toBottomOf="@+id/courseSpinner">
 
         <LinearLayout
             android:id="@+id/searchResultsContainer"
@@ -67,13 +63,14 @@
                 class="androidx.appcompat.widget.LinearLayoutCompat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal" />
+
             <LinearLayout
                 android:id="@+id/view4"
                 class="androidx.appcompat.widget.LinearLayoutCompat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
