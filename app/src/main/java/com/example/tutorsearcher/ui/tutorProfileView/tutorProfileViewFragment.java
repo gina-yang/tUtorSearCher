@@ -106,7 +106,7 @@ public class tutorProfileViewFragment extends AppCompatActivity {
         public void execute(User u)
         {
             // update loggedInUser to u
-            LoginActivity.loggedInUser = u;
+            LoginActivity.tutorToView = u;
             nametext.setText(u.getName());
             agetext.setText(((Long)(u.getAge())).toString());
             gendertext.setText(u.getGender());
