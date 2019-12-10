@@ -188,7 +188,7 @@ public class SearchFragment extends Fragment{
                         String tutorName = tutor.getName();
                         String tuteeEmail = LoginActivity.loggedInUser.getEmail();
                         String tutorEmail = tutor.getEmail();
-                        String course = textView.getText().toString();
+                        String course = courseSpinner.getSelectedItem().toString();
                         String time = daySpinner.getSelectedItem().toString() + " " + timeSpinner.getSelectedItem().toString();
                         Request request = new Request(tuteeName,tutorName,tuteeEmail,tutorEmail,"pending",course,time);
                         //now add the request to the database
@@ -226,7 +226,7 @@ public class SearchFragment extends Fragment{
         public void execute(ArrayList<Request> requests)
         {
             Log.d("kara", ""+results.size());
-            String course = textView.getText().toString();
+            String course = courseSpinner.getSelectedItem().toString();
             String time = daySpinner.getSelectedItem().toString() + " " + timeSpinner.getSelectedItem().toString();
             String tuteeEmail = LoginActivity.loggedInUser.getEmail();
             String tuteeName = LoginActivity.loggedInUser.getName();
