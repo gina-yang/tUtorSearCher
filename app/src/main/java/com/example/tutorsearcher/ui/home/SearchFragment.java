@@ -129,45 +129,73 @@ public class SearchFragment extends Fragment{
                 imageView.setMaxWidth(85);
                 //add the image to the view
 
-                final Button myButton = new Button(getContext());//button to hold text
-                int width = (int) (213 * scale + 0.5f);//convert width/height to dp units
+                TextView nameText = new TextView(getContext());//button to hold text
+                int width = (int) (129 * scale + 0.5f);//convert width/height to dp units
                 int height = (int) (85 * scale + 0.5f);//convert width/height to dp units
                 //add button to the hashmap, along with a new user
                 User tempUser = results.get(i);
-                buttonMap.put(myButton, tempUser);
+                //set when button is clicked
+                nameText.setWidth(width);
+                nameText.setHeight(height);
+                nameText.setText(results.get(i).getName());//button will contain the tutor's name
+                nameText.setTextSize(14);
+                nameText.setTextAppearance(getContext(), R.style.SearchResultStyle);//set style of button to our stored style
+                //add button to the horizontal view
+                imagetextview.addView(nameText);
+                //create button view profile
+
+                final Button viewProfileBtn = new Button(getContext());//button to hold text
+                buttonMap.put(viewProfileBtn, tempUser);
                 //set when button is clicked
                 //when button is clicked, a rwquest should be sent to the tutor. The info in the request will be held in the button text
-                myButton.setOnClickListener(new View.OnClickListener() {
+                viewProfileBtn.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-//                        //when send request is clicked, we first need to check if this request has been sent already or not
-//                        Log.d("click!","in onClick");
-//                        //create a new request and send it
-                        User tutor = buttonMap.get(myButton);//this is the tutor to send request to
-//                        String tuteeName = LoginActivity.loggedInUser.getName();
-//                        String tutorName = tutor.getName();
-//                        String tuteeEmail = LoginActivity.loggedInUser.getEmail();
+//                        //when viewProfileBtn, user is taken to tutor profile
+                        User tutor = buttonMap.get(viewProfileBtn);//this is the tutor to send request to
                         String tutorEmail = tutor.getEmail();
-//                        String course = textView.getText().toString();
-//                        String time = daySpinner.getSelectedItem().toString() + " " + timeSpinner.getSelectedItem().toString();
-//                        Request request = new Request(tuteeName,tutorName,tuteeEmail,tutorEmail,"pending",course,time);
-//                        //now add the request to the database
-//                        //TODO: check if request with same time has already been sent or not
-//                        DBAccessor dba = new DBAccessor();
-//                        sendRequestFromSearchResultWrapper sendRequestWrapper = new sendRequestFromSearchResultWrapper(tutor);
-//                        dba.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType(), sendRequestWrapper);//search for tutor with the given class and time
-                          //view profile
                         Log.d("click","click on tuor profile");
                         LoginActivity.tutorToView = new Tutor(tutorEmail);
                         openTutorProfile();
 
                     }
                 });
-                myButton.setWidth(width);
-                myButton.setHeight(height);
-                myButton.setText(results.get(i).getName());//button will contain the tutor's name
-                myButton.setTextAppearance(getContext(), R.style.SearchResultStyle);//set style of button to our stored style
+                viewProfileBtn.setWidth(width);
+                viewProfileBtn.setHeight(height);
+                viewProfileBtn.setText("View Profile");//button will contain the tutor's name
+                viewProfileBtn.setTextAppearance(getContext(), R.style.SearchResultStyle);//set style of button to our stored style
                 //add button to the horizontal view
-                imagetextview.addView(myButton);
+                imagetextview.addView(viewProfileBtn);
+
+                final Button sendRequestBtn = new Button(getContext());//button to send request
+                buttonMap.put(sendRequestBtn, tempUser);
+                //set when button is clicked
+                //when button is clicked, a rwquest should be sent to the tutor. The info in the request will be held in the button text
+                sendRequestBtn.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        //when send request is clicked, we first need to check if this request has been sent already or not
+//                        Log.d("click!","in onClick");
+//                        //create a new request and send it
+                        User tutor = buttonMap.get(sendRequestBtn);//this is the tutor to send request to
+                        String tuteeName = LoginActivity.loggedInUser.getName();
+                        String tutorName = tutor.getName();
+                        String tuteeEmail = LoginActivity.loggedInUser.getEmail();
+                        String tutorEmail = tutor.getEmail();
+                        String course = textView.getText().toString();
+                        String time = daySpinner.getSelectedItem().toString() + " " + timeSpinner.getSelectedItem().toString();
+                        Request request = new Request(tuteeName,tutorName,tuteeEmail,tutorEmail,"pending",course,time);
+                        //now add the request to the database
+                        //TODO: check if request with same time has already been sent or not
+                        DBAccessor dba = new DBAccessor();
+                        sendRequestFromSearchResultWrapper sendRequestWrapper = new sendRequestFromSearchResultWrapper(tutor);
+                        dba.getAllRequests(LoginActivity.loggedInUser.getEmail(), LoginActivity.loggedInUser.getType(), sendRequestWrapper);//search for tutor with the given class and time
+                    }
+                });
+                sendRequestBtn.setWidth(width);
+                sendRequestBtn.setHeight(height);
+                sendRequestBtn.setText("Send Request");//button will contain the tutor's name
+                sendRequestBtn.setTextAppearance(getContext(), R.style.SearchResultStyle);//set style of button to our stored style
+                //add button to the horizontal view
+                imagetextview.addView(sendRequestBtn);
                 searchResultsContainer.addView(imagetextview);//add the view containing the info to the screen
             }
         }
