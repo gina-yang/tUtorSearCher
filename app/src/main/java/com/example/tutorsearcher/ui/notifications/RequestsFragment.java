@@ -102,7 +102,14 @@ public class RequestsFragment extends Fragment {
                 requestInfo.setWidth((int) (213 * scale + 0.5f));
                 requestInfo.setHeight((int) (85 * scale + 0.5f));
                 //get all the info from the tutee request
-                requestInfo.setText(request.tuteeName + "\n"+request.course+" "+request.time);
+
+                if(request.status.toLowerCase().equals("accepted"))
+                {
+                    requestInfo.setText(request.tuteeName + "\n"+request.course+" "+request.time + "\n" + request.tuteeEmail);
+                } else {
+                    requestInfo.setText(request.tuteeName + "\n"+request.course+" "+request.time);
+                }
+
                 horizontalLayout.addView(requestInfo);
                 if(request.status.equals("pending"))
                 {//request is pending, so we want one button to accept, and another to reject
