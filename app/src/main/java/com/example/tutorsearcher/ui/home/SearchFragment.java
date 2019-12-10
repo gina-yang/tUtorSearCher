@@ -44,7 +44,6 @@ public class SearchFragment extends Fragment{
     Spinner daySpinner;//drop down menu for the day to be searched
     Spinner timeSpinner;//drop down menu for the time to be searched
     Spinner courseSpinner;//drop down menu for the course to be searched
-    EditText textView;//hold the course user is searching for
     //create a db acessor that will be used to do search
     DBAccessor mDBAccessor = new DBAccessor();
     private HomeViewModel homeViewModel;
